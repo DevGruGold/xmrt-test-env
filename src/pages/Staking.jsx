@@ -3,175 +3,269 @@ import { Link } from 'react-router-dom';
 import BackgroundMiner from '../components/BackgroundMiner';
 
 const Staking = () => {
-  const [stakedAmount, setStakedAmount] = useState(5000);
-  const [stakeInput, setStakeInput] = useState('');
-  const [rewards, setRewards] = useState(247.83);
+  const [stakeAmount, setStakeAmount] = useState('');
+  const [stakingPeriod, setStakingPeriod] = useState('30');
+
+  const calculateRewards = () => {
+    const amount = parseFloat(stakeAmount) || 0;
+    const period = parseInt(stakingPeriod);
+    const annualRate = 0.12; // 12% APY
+    const dailyRate = annualRate / 365;
+    return (amount * dailyRate * period).toFixed(6);
+  };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="page-container">
       <BackgroundMiner page="Staking" />
       
-      <div className="text-center mb-12">
-        <h1 className="text-4xl sm:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-500 to-pink-400 bg-clip-text text-transparent">
-          XMRT Staking & Rewards
-        </h1>
-        <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
-          Stake your XMRT tokens to earn rewards while supporting the network. 
-          Earn additional XMR through background mobile mining while you stake.
-        </p>
-        
-        {/* Mining Integration Notice */}
-        <div className="bg-gradient-to-r from-orange-600 to-red-600 p-4 rounded-lg mb-8 max-w-2xl mx-auto">
-          <div className="flex items-center justify-center space-x-2 text-white">
-            <span className="text-lg">⛏️</span>
-            <span className="font-semibold">Mobile Mining Active</span>
-            <span className="text-sm opacity-90">- Earning XMR while staking XMRT</span>
+      <div className="container-main py-12">
+        {/* Hero Section */}
+        <div className="text-center mb-16">
+          <h1 className="text-responsive-3xl font-bold mb-6 text-gradient-primary">
+            XMRT Token Staking
+          </h1>
+          <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
+            Stake your XMRT tokens to earn rewards while supporting the ecosystem. 
+            Combine staking rewards with mobile mining for maximum earnings.
+          </p>
+          
+          {/* Key Benefits */}
+          <div className="grid md:grid-cols-3 gap-6 mb-12">
+            <div className="card-feature">
+              <div className="text-4xl mb-4">💎</div>
+              <h3 className="text-xl font-semibold text-blue-400 mb-2">12% APY</h3>
+              <p className="text-gray-300">Competitive annual percentage yield on staked tokens</p>
+            </div>
+            <div className="card-feature">
+              <div className="text-4xl mb-4">🔄</div>
+              <h3 className="text-xl font-semibold text-green-400 mb-2">Dual Rewards</h3>
+              <p className="text-gray-300">Earn staking rewards + mobile mining simultaneously</p>
+            </div>
+            <div className="card-feature">
+              <div className="text-4xl mb-4">🗳️</div>
+              <h3 className="text-xl font-semibold text-purple-400 mb-2">Governance Rights</h3>
+              <p className="text-gray-300">Participate in DAO decisions and ecosystem governance</p>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Staking Dashboard */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-        {/* Staking Stats */}
-        <div className="lg:col-span-2 bg-gray-800 p-8 rounded-xl shadow-lg">
-          <h3 className="text-2xl font-semibold text-white mb-6">Your Staking Portfolio</h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-gray-900 p-6 rounded-lg text-center">
-              <div className="text-3xl font-bold text-blue-400 mb-2">
-                {stakedAmount.toLocaleString()} XMRT
-              </div>
-              <div className="text-gray-400">Total Staked</div>
-            </div>
-            <div className="bg-gray-900 p-6 rounded-lg text-center">
-              <div className="text-3xl font-bold text-green-400 mb-2">
-                {rewards.toFixed(2)} XMRT
-              </div>
-              <div className="text-gray-400">Rewards Earned</div>
-            </div>
-            <div className="bg-gray-900 p-6 rounded-lg text-center">
-              <div className="text-3xl font-bold text-purple-400 mb-2">
-                12.5%
-              </div>
-              <div className="text-gray-400">Annual APY</div>
-            </div>
-          </div>
-
-          {/* Staking Actions */}
-          <div className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Amount to Stake
-              </label>
-              <div className="flex space-x-4">
+        {/* Staking Interface */}
+        <div className="grid lg:grid-cols-2 gap-12 mb-16">
+          {/* Staking Form */}
+          <div className="card-primary">
+            <h2 className="text-2xl font-bold text-white mb-6">Stake XMRT Tokens</h2>
+            
+            <div className="space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Amount to Stake (XMRT)
+                </label>
                 <input
                   type="number"
-                  value={stakeInput}
-                  onChange={(e) => setStakeInput(e.target.value)}
-                  className="flex-1 p-3 bg-gray-900 border border-gray-600 rounded-lg text-white focus:border-blue-500 focus:outline-none"
-                  placeholder="Enter XMRT amount"
+                  value={stakeAmount}
+                  onChange={(e) => setStakeAmount(e.target.value)}
+                  placeholder="Enter amount"
+                  className="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-3 text-white focus-ring"
                 />
-                <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
-                  Stake
-                </button>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Staking Period (Days)
+                </label>
+                <select
+                  value={stakingPeriod}
+                  onChange={(e) => setStakingPeriod(e.target.value)}
+                  className="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-3 text-white focus-ring"
+                >
+                  <option value="30">30 Days (Flexible)</option>
+                  <option value="90">90 Days (+2% Bonus)</option>
+                  <option value="180">180 Days (+5% Bonus)</option>
+                  <option value="365">365 Days (+10% Bonus)</option>
+                </select>
+              </div>
+
+              {/* Rewards Calculation */}
+              <div className="bg-gray-900 p-4 rounded-lg">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-gray-400">Estimated Rewards:</span>
+                  <span className="text-green-400 font-semibold">{calculateRewards()} XMRT</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-400">APY:</span>
+                  <span className="text-blue-400 font-semibold">12%</span>
+                </div>
+              </div>
+
+              <button className="btn-primary w-full py-4 text-lg">
+                Stake Tokens
+              </button>
+            </div>
+          </div>
+
+          {/* Staking Stats */}
+          <div className="space-y-6">
+            <div className="card-primary">
+              <h3 className="text-xl font-semibold text-white mb-4">Your Staking Portfolio</h3>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center p-3 bg-gray-900 rounded">
+                  <span className="text-gray-300">Total Staked</span>
+                  <span className="text-blue-400 font-semibold">0 XMRT</span>
+                </div>
+                <div className="flex justify-between items-center p-3 bg-gray-900 rounded">
+                  <span className="text-gray-300">Pending Rewards</span>
+                  <span className="text-green-400 font-semibold">0 XMRT</span>
+                </div>
+                <div className="flex justify-between items-center p-3 bg-gray-900 rounded">
+                  <span className="text-gray-300">Total Earned</span>
+                  <span className="text-purple-400 font-semibold">0 XMRT</span>
+                </div>
               </div>
             </div>
-            
-            <div className="flex space-x-4">
-              <button className="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold transition-colors">
-                Claim Rewards
-              </button>
-              <button className="flex-1 bg-orange-600 hover:bg-orange-700 text-white py-3 rounded-lg font-semibold transition-colors">
-                Unstake
-              </button>
+
+            <div className="card-primary">
+              <h3 className="text-xl font-semibold text-white mb-4">Pool Statistics</h3>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center p-3 bg-gray-900 rounded">
+                  <span className="text-gray-300">Total Value Locked</span>
+                  <span className="text-orange-400 font-semibold">$2.4M</span>
+                </div>
+                <div className="flex justify-between items-center p-3 bg-gray-900 rounded">
+                  <span className="text-gray-300">Total Stakers</span>
+                  <span className="text-blue-400 font-semibold">1,247</span>
+                </div>
+                <div className="flex justify-between items-center p-3 bg-gray-900 rounded">
+                  <span className="text-gray-300">Average APY</span>
+                  <span className="text-green-400 font-semibold">12.5%</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Staking Info */}
-        <div className="bg-gray-800 p-6 rounded-xl shadow-lg">
-          <h3 className="text-xl font-semibold text-white mb-4">Staking Benefits</h3>
-          <div className="space-y-4">
-            <div className="flex items-center p-3 bg-gray-900 rounded">
-              <span className="text-green-400 mr-3">✓</span>
-              <span className="text-gray-300">12.5% Annual APY</span>
-            </div>
-            <div className="flex items-center p-3 bg-gray-900 rounded">
-              <span className="text-green-400 mr-3">✓</span>
-              <span className="text-gray-300">Governance Voting Rights</span>
-            </div>
-            <div className="flex items-center p-3 bg-gray-900 rounded">
-              <span className="text-green-400 mr-3">✓</span>
-              <span className="text-gray-300">Flexible Lock Periods</span>
-            </div>
-            <div className="flex items-center p-3 bg-gray-900 rounded">
-              <span className="text-orange-400 mr-3">⛏️</span>
-              <span className="text-gray-300">Background XMR Mining</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Dual Rewards Section */}
-      <div className="bg-gradient-to-r from-blue-900 to-purple-900 p-8 rounded-xl shadow-lg mb-12">
-        <h3 className="text-2xl font-bold text-white mb-6 text-center">
-          💎 Dual Rewards System
-        </h3>
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className="text-center p-6 bg-black/20 rounded-lg">
-            <div className="text-4xl mb-4">💎</div>
-            <h4 className="text-xl font-semibold text-blue-400 mb-3">XMRT Staking Rewards</h4>
-            <p className="text-gray-300 mb-4">
-              Earn 12.5% APY on your staked XMRT tokens with flexible lock periods and governance rights.
+        {/* Dual Rewards Section */}
+        <div className="card-feature mb-16">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-white mb-4">
+              🔄 Dual Rewards System
+            </h2>
+            <p className="text-xl text-gray-300">
+              Maximize your earnings by combining staking rewards with mobile mining
             </p>
-            <div className="text-2xl font-bold text-green-400">12.5% APY</div>
           </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="bg-gray-900/50 p-6 rounded-xl">
+              <h3 className="text-xl font-semibold text-blue-400 mb-4">💎 Staking Rewards</h3>
+              <ul className="space-y-2 text-gray-300">
+                <li>• 12% APY on staked XMRT tokens</li>
+                <li>• Bonus rates for longer lock periods</li>
+                <li>• Governance voting rights</li>
+                <li>• Compound rewards automatically</li>
+              </ul>
+            </div>
+
+            <div className="bg-gray-900/50 p-6 rounded-xl">
+              <h3 className="text-xl font-semibold text-orange-400 mb-4">⛏️ Mining Rewards</h3>
+              <ul className="space-y-2 text-gray-300">
+                <li>• Mine XMR on mobile devices</li>
+                <li>• 300-500 H/s average hashrate</li>
+                <li>• Pool rewards distributed hourly</li>
+                <li>• Background mining while staking</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="text-center mt-8">
+            <Link
+              to="/mining"
+              className="btn-secondary inline-flex items-center space-x-2"
+            >
+              <span>⛏️</span>
+              <span>Start Mobile Mining</span>
+            </Link>
+          </div>
+        </div>
+
+        {/* How It Works */}
+        <div className="mb-16">
+          <h2 className="text-3xl font-bold text-center text-white mb-12">
+            How Staking Works
+          </h2>
           
-          <div className="text-center p-6 bg-black/20 rounded-lg">
-            <div className="text-4xl mb-4">⛏️</div>
-            <h4 className="text-xl font-semibold text-orange-400 mb-3">Mobile XMR Mining</h4>
-            <p className="text-gray-300 mb-4">
-              Simultaneously mine Monero on your mobile device while staking, earning additional XMR rewards.
-            </p>
-            <div className="text-2xl font-bold text-orange-400">300-500 H/s</div>
+          <div className="grid md:grid-cols-4 gap-6">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">1️⃣</span>
+              </div>
+              <h3 className="text-lg font-semibold text-blue-400 mb-2">Deposit Tokens</h3>
+              <p className="text-gray-300 text-sm">Stake your XMRT tokens in the smart contract</p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">2️⃣</span>
+              </div>
+              <h3 className="text-lg font-semibold text-green-400 mb-2">Earn Rewards</h3>
+              <p className="text-gray-300 text-sm">Automatically earn 12% APY on your staked tokens</p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">3️⃣</span>
+              </div>
+              <h3 className="text-lg font-semibold text-purple-400 mb-2">Participate</h3>
+              <p className="text-gray-300 text-sm">Vote on governance proposals and ecosystem decisions</p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">4️⃣</span>
+              </div>
+              <h3 className="text-lg font-semibold text-orange-400 mb-2">Compound</h3>
+              <p className="text-gray-300 text-sm">Reinvest rewards for exponential growth</p>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Quick Actions */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Link
-          to="/mining"
-          className="bg-orange-600 hover:bg-orange-700 text-white p-6 rounded-lg text-center transition-all duration-300 hover:scale-105 shadow-lg group"
-        >
-          <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">⛏️</div>
-          <span className="font-semibold text-lg">Mobile Mining</span>
-          <p className="text-orange-100 text-sm mt-2">Boost earnings</p>
-        </Link>
-        <Link
-          to="/analytics"
-          className="bg-blue-600 hover:bg-blue-700 text-white p-6 rounded-lg text-center transition-all duration-300 hover:scale-105 shadow-lg group"
-        >
-          <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">📊</div>
-          <span className="font-semibold text-lg">View Analytics</span>
-          <p className="text-blue-100 text-sm mt-2">Track rewards</p>
-        </Link>
-        <Link
-          to="/dao"
-          className="bg-purple-600 hover:bg-purple-700 text-white p-6 rounded-lg text-center transition-all duration-300 hover:scale-105 shadow-lg group"
-        >
-          <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">🗳️</div>
-          <span className="font-semibold text-lg">DAO Governance</span>
-          <p className="text-purple-100 text-sm mt-2">Vote on proposals</p>
-        </Link>
-        <Link
-          to="/banking"
-          className="bg-green-600 hover:bg-green-700 text-white p-6 rounded-lg text-center transition-all duration-300 hover:scale-105 shadow-lg group"
-        >
-          <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">🏦</div>
-          <span className="font-semibold text-lg">Banking</span>
-          <p className="text-green-100 text-sm mt-2">Manage funds</p>
-        </Link>
+        {/* Quick Actions */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <Link
+            to="/analytics"
+            className="card-primary text-center group"
+          >
+            <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">📊</div>
+            <span className="font-semibold text-lg text-blue-400">View Analytics</span>
+            <p className="text-gray-400 text-sm mt-2">Track performance</p>
+          </Link>
+
+          <Link
+            to="/dao"
+            className="card-primary text-center group"
+          >
+            <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">🗳️</div>
+            <span className="font-semibold text-lg text-purple-400">DAO Governance</span>
+            <p className="text-gray-400 text-sm mt-2">Vote on proposals</p>
+          </Link>
+
+          <Link
+            to="/banking"
+            className="card-primary text-center group"
+          >
+            <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">🏦</div>
+            <span className="font-semibold text-lg text-green-400">Banking</span>
+            <p className="text-gray-400 text-sm mt-2">Manage funds</p>
+          </Link>
+
+          <Link
+            to="/mining"
+            className="card-primary text-center group"
+          >
+            <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">⛏️</div>
+            <span className="font-semibold text-lg text-orange-400">Start Mining</span>
+            <p className="text-gray-400 text-sm mt-2">Dual rewards</p>
+          </Link>
+        </div>
       </div>
     </div>
   );
