@@ -1,13 +1,6 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "installCommand": "npm install",
-  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- contracts/ scripts/ test/ hardhat.config.js hardhat.config.cjs contracts-package.json CONTRACTS_README.md",
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ]
+  "installCommand": "npm install"
 }
 

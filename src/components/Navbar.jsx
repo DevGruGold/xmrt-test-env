@@ -1,67 +1,56 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { ConnectWallet, useAddress, useConnectionStatus } from "@thirdweb-dev/react";
-import { useState, useEffect } from 'react';
 
-function Navbar() {
-  const address = useAddress();
-  const connectionStatus = useConnectionStatus();
-  const [errorMessage, setErrorMessage] = useState("");
-  
-  // Clear error message after 5 seconds
-  useEffect(() => {
-    if (errorMessage) {
-      const timer = setTimeout(() => {
-        setErrorMessage("");
-      }, 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [errorMessage]);
-  
-  // Handle connection status changes with error handling
-  useEffect(() => {
-    try {
-      console.log('Connection status changed:', connectionStatus);
-      console.log('Address:', address);
-      
-      if (connectionStatus === "disconnected") {
-        console.log("Wallet disconnected");
-      } else if (connectionStatus === "connecting") {
-        console.log("Connecting wallet...");
-      } else if (connectionStatus === "connected") {
-        console.log("Wallet connected:", address);
-      } else if (connectionStatus === "unknown") {
-        console.log("Connection status unknown");
-      }
-    } catch (error) {
-      console.error("Error in connection status handler:", error);
-      setErrorMessage("Connection error occurred");
-    }
-  }, [connectionStatus, address]);
-
+const Navbar = () => {
   return (
-    <nav className="bg-gray-800 p-4">
-      <div className="container mx-auto flex justify-between items-center">
-        <div className="text-white font-bold text-xl">XMRT Ecosystem</div>
-        <div className="flex space-x-4 items-center">
-          <Link to="/" className="text-white hover:text-gray-300">Home</Link>
-          <Link to="/staking" className="text-white hover:text-gray-300">Staking</Link>
-          <Link to="/mining" className="text-white hover:text-gray-300">Mining</Link>
-          <Link to="/cashdapp" className="text-white hover:text-gray-300">CashDapp</Link>
-          <Link to="/dao" className="text-white hover:text-gray-300">DAO</Link>
+    <nav className="bg-gray-800 shadow-lg">
+      <div className="container mx-auto px-4">
+        <div className="flex justify-between items-center py-4">
+          <Link to="/" className="text-2xl font-bold text-blue-400">
+            XMRT Test Environment
+          </Link>
           
-          {errorMessage && (
-            <div className="text-red-500 mr-2 text-sm">{errorMessage}</div>
-          )}
+          <div className="flex space-x-6">
+            <Link 
+              to="/" 
+              className="text-gray-300 hover:text-white transition-colors"
+            >
+              Home
+            </Link>
+            <Link 
+              to="/staking" 
+              className="text-gray-300 hover:text-white transition-colors"
+            >
+              Staking
+            </Link>
+            <Link 
+              to="/mining" 
+              className="text-gray-300 hover:text-white transition-colors"
+            >
+              Mining
+            </Link>
+            <Link 
+              to="/cashdapp" 
+              className="text-gray-300 hover:text-white transition-colors"
+            >
+              CashDapp
+            </Link>
+            <Link 
+              to="/dao" 
+              className="text-gray-300 hover:text-white transition-colors"
+            >
+              DAO
+            </Link>
+          </div>
           
-          <ConnectWallet 
-            theme="dark"
-            btnTitle="Connect Wallet"
-          />
+          <div className="text-sm text-gray-400">
+            Test Environment
+          </div>
         </div>
       </div>
     </nav>
   );
-}
+};
 
 export default Navbar;
 
