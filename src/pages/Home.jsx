@@ -1,353 +1,305 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import BackgroundMiner from '../components/BackgroundMiner';
 
 const Home = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <BackgroundMiner page="Home" />
+      
       {/* Hero Section */}
       <div className="text-center mb-16">
-        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-8 bg-gradient-to-r from-blue-400 via-purple-500 to-green-400 bg-clip-text text-transparent">
+        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-8 bg-gradient-to-r from-blue-400 via-purple-500 to-orange-400 bg-clip-text text-transparent">
           XMRT Ecosystem
         </h1>
-        <p className="text-xl sm:text-2xl text-gray-300 mb-10 max-w-4xl mx-auto leading-relaxed">
-          A comprehensive decentralized ecosystem facilitating free banking, mobile Monero mining, 
-          AI-powered governance, and seamless financial services integration.
+        <p className="text-xl sm:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto">
+          The world's first blockchain ecosystem with revolutionary mobile Monero mining, 
+          comprehensive DeFi services, and AI-powered governance.
         </p>
-        <div className="flex flex-wrap justify-center gap-4">
-          <a 
-            href="https://coldcash.vercel.app" 
-            target="_blank" 
+        
+        {/* Revolutionary Mining Highlight */}
+        <div className="bg-gradient-to-r from-orange-600 to-red-600 p-8 rounded-2xl mb-12 shadow-2xl">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
+            🚀 World's First Mobile-Friendly Monero Mining
+          </h2>
+          <div className="grid md:grid-cols-3 gap-6 text-white mb-6">
+            <div className="text-center">
+              <div className="text-4xl font-bold mb-2">300-500 H/s</div>
+              <div className="text-lg opacity-90">Average Android Phone</div>
+              <div className="text-sm opacity-75">Half of laptop performance</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold mb-2">FREE</div>
+              <div className="text-lg opacity-90">No Cost Mining</div>
+              <div className="text-sm opacity-75">vs Paid Apps like CT Miner</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold mb-2">3 Steps</div>
+              <div className="text-lg opacity-90">Simple Setup</div>
+              <div className="text-sm opacity-75">Copy-paste installation</div>
+            </div>
+          </div>
+          <p className="text-xl text-white/90 mb-6">
+            Our breakthrough Python app modifies the mobile miner SDK for Termux, making Monero mining 
+            accessible to billions of Android users for the first time.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a
+              href="https://www.mobilemonero.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white text-orange-600 px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition-all duration-300 hover:scale-105 shadow-lg"
+            >
+              📱 Get Mobile Miner
+            </a>
+            <Link
+              to="/mining"
+              className="bg-orange-800 hover:bg-orange-900 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all duration-300 hover:scale-105 shadow-lg"
+            >
+              ⛏️ View Mining Dashboard
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Core Features Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        {/* Mobile Mining */}
+        <Link
+          to="/mining"
+          className="group bg-gradient-to-br from-orange-600 to-red-600 p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105"
+        >
+          <div className="text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">⛏️</div>
+          <h3 className="text-2xl font-bold text-white mb-4">Revolutionary Mobile Mining</h3>
+          <p className="text-orange-100 mb-4">
+            World's first user-friendly mobile Monero mining. Mine XMR on any Android device with 300-500 H/s performance.
+          </p>
+          <div className="flex items-center text-white font-semibold">
+            <span>Start Mining</span>
+            <span className="ml-2 group-hover:translate-x-2 transition-transform duration-300">→</span>
+          </div>
+        </Link>
+
+        {/* Staking */}
+        <Link
+          to="/staking"
+          className="group bg-gradient-to-br from-blue-600 to-purple-600 p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105"
+        >
+          <div className="text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">💎</div>
+          <h3 className="text-2xl font-bold text-white mb-4">XMRT Staking</h3>
+          <p className="text-blue-100 mb-4">
+            Stake XMRT tokens for 12.5% APY while earning additional XMR through background mobile mining.
+          </p>
+          <div className="flex items-center text-white font-semibold">
+            <span>Start Staking</span>
+            <span className="ml-2 group-hover:translate-x-2 transition-transform duration-300">→</span>
+          </div>
+        </Link>
+
+        {/* Banking */}
+        <Link
+          to="/banking"
+          className="group bg-gradient-to-br from-green-600 to-teal-600 p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105"
+        >
+          <div className="text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">🏦</div>
+          <h3 className="text-2xl font-bold text-white mb-4">Banking Services</h3>
+          <p className="text-green-100 mb-4">
+            Complete banking ecosystem with CashDapp integration, instant payments, and crypto services.
+          </p>
+          <div className="flex items-center text-white font-semibold">
+            <span>Access Banking</span>
+            <span className="ml-2 group-hover:translate-x-2 transition-transform duration-300">→</span>
+          </div>
+        </Link>
+
+        {/* Asset Management */}
+        <Link
+          to="/asset-management"
+          className="group bg-gradient-to-br from-yellow-600 to-orange-600 p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105"
+        >
+          <div className="text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">💼</div>
+          <h3 className="text-2xl font-bold text-white mb-4">Asset Tokenization</h3>
+          <p className="text-yellow-100 mb-4">
+            Transform real-world assets into blockchain tokens with complete tokenization workflow.
+          </p>
+          <div className="flex items-center text-white font-semibold">
+            <span>Tokenize Assets</span>
+            <span className="ml-2 group-hover:translate-x-2 transition-transform duration-300">→</span>
+          </div>
+        </Link>
+
+        {/* Analytics */}
+        <Link
+          to="/analytics"
+          className="group bg-gradient-to-br from-purple-600 to-pink-600 p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105"
+        >
+          <div className="text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">📊</div>
+          <h3 className="text-2xl font-bold text-white mb-4">Analytics & Insights</h3>
+          <p className="text-purple-100 mb-4">
+            Real-time profit tracking, expense management, and comprehensive analytics across all activities.
+          </p>
+          <div className="flex items-center text-white font-semibold">
+            <span>View Analytics</span>
+            <span className="ml-2 group-hover:translate-x-2 transition-transform duration-300">→</span>
+          </div>
+        </Link>
+
+        {/* DAO Governance */}
+        <Link
+          to="/dao"
+          className="group bg-gradient-to-br from-indigo-600 to-blue-600 p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105"
+        >
+          <div className="text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">🗳️</div>
+          <h3 className="text-2xl font-bold text-white mb-4">DAO Governance</h3>
+          <p className="text-indigo-100 mb-4">
+            Participate in decentralized governance with AI-powered agents managing proposals and voting.
+          </p>
+          <div className="flex items-center text-white font-semibold">
+            <span>Join DAO</span>
+            <span className="ml-2 group-hover:translate-x-2 transition-transform duration-300">→</span>
+          </div>
+        </Link>
+      </div>
+
+      {/* Background Mining Integration */}
+      <div className="bg-gradient-to-r from-gray-900 to-gray-800 p-8 rounded-2xl shadow-lg mb-16">
+        <h2 className="text-3xl font-bold text-center text-white mb-8">
+          🔄 Background Mining Across All DApps
+        </h2>
+        <div className="text-center mb-8">
+          <p className="text-xl text-gray-300 mb-4">
+            Our revolutionary mobile mining technology runs seamlessly in the background 
+            while you use any XMRT ecosystem application.
+          </p>
+          <p className="text-gray-400">
+            Earn XMR continuously while staking, banking, trading, voting, or managing assets. 
+            The first truly passive mobile mining experience.
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="text-center p-4 bg-gray-800 rounded-lg">
+            <div className="text-3xl mb-2">💎</div>
+            <div className="text-sm text-gray-300">Mine while Staking</div>
+            <div className="text-xs text-orange-400">+12.5% APY + XMR</div>
+          </div>
+          <div className="text-center p-4 bg-gray-800 rounded-lg">
+            <div className="text-3xl mb-2">🏦</div>
+            <div className="text-sm text-gray-300">Mine while Banking</div>
+            <div className="text-xs text-orange-400">Passive income</div>
+          </div>
+          <div className="text-center p-4 bg-gray-800 rounded-lg">
+            <div className="text-3xl mb-2">💼</div>
+            <div className="text-sm text-gray-300">Mine while Trading</div>
+            <div className="text-xs text-orange-400">Dual earnings</div>
+          </div>
+          <div className="text-center p-4 bg-gray-800 rounded-lg">
+            <div className="text-3xl mb-2">🗳️</div>
+            <div className="text-sm text-gray-300">Mine while Voting</div>
+            <div className="text-xs text-orange-400">Governance rewards</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Key Statistics */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+        <div className="bg-gray-800 p-6 rounded-xl text-center shadow-lg">
+          <div className="text-3xl font-bold text-blue-400 mb-2">1,247</div>
+          <div className="text-gray-400">Active Mobile Miners</div>
+        </div>
+        <div className="bg-gray-800 p-6 rounded-xl text-center shadow-lg">
+          <div className="text-3xl font-bold text-green-400 mb-2">847.3 KH/s</div>
+          <div className="text-gray-400">Total Pool Hashrate</div>
+        </div>
+        <div className="bg-gray-800 p-6 rounded-xl text-center shadow-lg">
+          <div className="text-3xl font-bold text-purple-400 mb-2">8,934</div>
+          <div className="text-gray-400">DAO Members</div>
+        </div>
+        <div className="bg-gray-800 p-6 rounded-xl text-center shadow-lg">
+          <div className="text-3xl font-bold text-orange-400 mb-2">$2.4M</div>
+          <div className="text-gray-400">Total Value Locked</div>
+        </div>
+      </div>
+
+      {/* External Platforms */}
+      <div className="bg-gray-800 p-8 rounded-2xl shadow-lg mb-16">
+        <h2 className="text-3xl font-bold text-center text-white mb-8">
+          🌐 Integrated Platforms
+        </h2>
+        <div className="grid md:grid-cols-2 gap-8">
+          <a
+            href="https://coldcash.vercel.app"
+            target="_blank"
             rel="noopener noreferrer"
-            className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-lg"
+            className="group bg-gradient-to-r from-green-600 to-teal-600 p-6 rounded-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
           >
-            Access CashDapp →
+            <div className="flex items-center mb-4">
+              <div className="text-4xl mr-4">🏦</div>
+              <div>
+                <h3 className="text-2xl font-bold text-white">CashDapp Platform</h3>
+                <p className="text-green-100">Complete banking and financial services</p>
+              </div>
+            </div>
+            <p className="text-green-100 mb-4">
+              Access the full CashDapp banking platform with crypto integration, 
+              payment processing, and advanced financial tools.
+            </p>
+            <div className="flex items-center text-white font-semibold">
+              <span>Launch CashDapp</span>
+              <span className="ml-2 group-hover:translate-x-2 transition-transform duration-300">→</span>
+            </div>
           </a>
-          <a 
-            href="https://www.mobilemonero.com" 
-            target="_blank" 
+
+          <a
+            href="https://www.mobilemonero.com"
+            target="_blank"
             rel="noopener noreferrer"
-            className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-lg"
+            className="group bg-gradient-to-r from-orange-600 to-red-600 p-6 rounded-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
           >
-            Mobile Monero →
+            <div className="flex items-center mb-4">
+              <div className="text-4xl mr-4">📱</div>
+              <div>
+                <h3 className="text-2xl font-bold text-white">Mobile Monero</h3>
+                <p className="text-orange-100">Revolutionary mobile mining platform</p>
+              </div>
+            </div>
+            <p className="text-orange-100 mb-4">
+              Download the world's first user-friendly mobile Monero miner. 
+              Simple 3-step setup for any Android device.
+            </p>
+            <div className="flex items-center text-white font-semibold">
+              <span>Get Mobile Miner</span>
+              <span className="ml-2 group-hover:translate-x-2 transition-transform duration-300">→</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      {/* Call to Action */}
+      <div className="text-center bg-gradient-to-r from-blue-600 to-purple-600 p-12 rounded-2xl shadow-2xl">
+        <h2 className="text-4xl font-bold text-white mb-6">
+          Ready to Join the Revolution?
+        </h2>
+        <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+          Experience the world's first mobile-friendly Monero mining ecosystem with 
+          comprehensive DeFi services, AI governance, and revolutionary technology.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <a
+            href="https://www.mobilemonero.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all duration-300 hover:scale-105 shadow-lg"
+          >
+            📱 Start Mobile Mining
           </a>
           <Link
-            to="/deployment"
-            className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-lg"
+            to="/staking"
+            className="bg-white text-blue-600 px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition-all duration-300 hover:scale-105 shadow-lg"
           >
-            Deploy System →
+            💎 Stake XMRT Tokens
           </Link>
         </div>
-      </div>
-
-      {/* Main Ecosystem Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-        <Link 
-          to="/banking"
-          className="bg-gray-800 p-8 rounded-xl text-center hover:bg-gray-750 transition-all duration-300 hover:scale-105 cursor-pointer shadow-lg group"
-        >
-          <div className="text-5xl mb-6 group-hover:scale-110 transition-transform duration-300">🏦</div>
-          <h3 className="text-2xl font-semibold text-blue-400 mb-4 group-hover:text-blue-300">CashDapp Banking</h3>
-          <p className="text-gray-300 leading-relaxed">
-            Free banking, onramping, offramping, and cold storage through integrated CashDapp platform
-          </p>
-        </Link>
-        <Link 
-          to="/mining"
-          className="bg-gray-800 p-8 rounded-xl text-center hover:bg-gray-750 transition-all duration-300 hover:scale-105 cursor-pointer shadow-lg group"
-        >
-          <div className="text-5xl mb-6 group-hover:scale-110 transition-transform duration-300">⛏️</div>
-          <h3 className="text-2xl font-semibold text-orange-400 mb-4 group-hover:text-orange-300">Mobile Mining</h3>
-          <p className="text-gray-300 leading-relaxed">
-            Mobile Monero mining with pooled rewards distribution to users and developers
-          </p>
-        </Link>
-        <Link 
-          to="/ai-agents"
-          className="bg-gray-800 p-8 rounded-xl text-center hover:bg-gray-750 transition-all duration-300 hover:scale-105 cursor-pointer shadow-lg group"
-        >
-          <div className="text-5xl mb-6 group-hover:scale-110 transition-transform duration-300">🤖</div>
-          <h3 className="text-2xl font-semibold text-purple-400 mb-4 group-hover:text-purple-300">AI Governance</h3>
-          <p className="text-gray-300 leading-relaxed">
-            AI agents in executive roles managing DAO operations and decision-making
-          </p>
-        </Link>
-      </div>
-
-      {/* Feature Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-        <Link 
-          to="/staking"
-          className="bg-gray-800 p-6 rounded-lg hover:bg-gray-750 transition-all duration-300 hover:scale-105 cursor-pointer shadow-lg group"
-        >
-          <div className="text-3xl mb-4 group-hover:scale-110 transition-transform duration-300">💰</div>
-          <h3 className="text-lg font-semibold text-green-400 mb-2 group-hover:text-green-300">Staking Rewards</h3>
-          <p className="text-gray-400 text-sm">Earn rewards by staking XMRT tokens</p>
-        </Link>
-        <Link 
-          to="/dao"
-          className="bg-gray-800 p-6 rounded-lg hover:bg-gray-750 transition-all duration-300 hover:scale-105 cursor-pointer shadow-lg group"
-        >
-          <div className="text-3xl mb-4 group-hover:scale-110 transition-transform duration-300">🗳️</div>
-          <h3 className="text-lg font-semibold text-blue-400 mb-2 group-hover:text-blue-300">DAO Governance</h3>
-          <p className="text-gray-400 text-sm">Participate in decentralized governance</p>
-        </Link>
-        <Link 
-          to="/analytics"
-          className="bg-gray-800 p-6 rounded-lg hover:bg-gray-750 transition-all duration-300 hover:scale-105 cursor-pointer shadow-lg group"
-        >
-          <div className="text-3xl mb-4 group-hover:scale-110 transition-transform duration-300">📊</div>
-          <h3 className="text-lg font-semibold text-purple-400 mb-2 group-hover:text-purple-300">Analytics</h3>
-          <p className="text-gray-400 text-sm">Real-time ecosystem analytics</p>
-        </Link>
-        <Link 
-          to="/asset-management"
-          className="bg-gray-800 p-6 rounded-lg hover:bg-gray-750 transition-all duration-300 hover:scale-105 cursor-pointer shadow-lg group"
-        >
-          <div className="text-3xl mb-4 group-hover:scale-110 transition-transform duration-300">💎</div>
-          <h3 className="text-lg font-semibold text-yellow-400 mb-2 group-hover:text-yellow-300">Asset Management</h3>
-          <p className="text-gray-400 text-sm">Tokenize and manage real-world assets</p>
-        </Link>
-      </div>
-
-      {/* Smart Contract Deployment Status */}
-      <div className="bg-gray-800 p-8 rounded-xl mb-16 shadow-lg">
-        <h2 className="text-3xl font-semibold mb-8 text-center text-green-400">
-          Smart Contract Deployment Status
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Link 
-            to="/contracts"
-            className="bg-gray-900 p-6 rounded-lg hover:bg-gray-850 transition-all duration-300 hover:scale-105 cursor-pointer group"
-          >
-            <h3 className="font-semibold text-blue-400 mb-3 group-hover:text-blue-300">XMRT Token Contract</h3>
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-gray-400">Status:</span>
-                <span className="text-green-400">Ready for Deployment</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Network:</span>
-                <span className="text-yellow-400">Sepolia Testnet</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Features:</span>
-                <span className="text-gray-300">Staking, Governance, Rewards</span>
-              </div>
-            </div>
-          </Link>
-          <Link 
-            to="/contracts"
-            className="bg-gray-900 p-6 rounded-lg hover:bg-gray-850 transition-all duration-300 hover:scale-105 cursor-pointer group"
-          >
-            <h3 className="font-semibold text-purple-400 mb-3 group-hover:text-purple-300">Monero Pool Contract</h3>
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-gray-400">Status:</span>
-                <span className="text-green-400">Ready for Deployment</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Integration:</span>
-                <span className="text-blue-400">Mobile Monero</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Distribution:</span>
-                <span className="text-gray-300">Users & Developers</span>
-              </div>
-            </div>
-          </Link>
-          <Link 
-            to="/cashdapp"
-            className="bg-gray-900 p-6 rounded-lg hover:bg-gray-850 transition-all duration-300 hover:scale-105 cursor-pointer group"
-          >
-            <h3 className="font-semibold text-orange-400 mb-3 group-hover:text-orange-300">CashDapp Integration</h3>
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-gray-400">Status:</span>
-                <span className="text-green-400">Live & Integrated</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Platform:</span>
-                <span className="text-blue-400">coldcash.vercel.app</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Services:</span>
-                <span className="text-gray-300">Banking, Payments, Storage</span>
-              </div>
-            </div>
-          </Link>
-        </div>
-      </div>
-
-      {/* AI Agent Architecture */}
-      <div className="bg-gray-800 p-8 rounded-xl mb-16 shadow-lg">
-        <h2 className="text-3xl font-semibold mb-8 text-center text-purple-400">
-          AI Agent Architecture
-        </h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          <Link 
-            to="/ai-agents"
-            className="bg-gray-900 p-4 rounded-lg text-center hover:bg-gray-850 transition-all duration-300 hover:scale-105 cursor-pointer group"
-          >
-            <div className="text-3xl mb-2 group-hover:scale-110 transition-transform duration-300">👑</div>
-            <h3 className="font-semibold text-blue-400 text-sm group-hover:text-blue-300">Admin Agent</h3>
-            <p className="text-gray-400 text-xs mt-1">System administration</p>
-          </Link>
-          <Link 
-            to="/ai-agents"
-            className="bg-gray-900 p-4 rounded-lg text-center hover:bg-gray-850 transition-all duration-300 hover:scale-105 cursor-pointer group"
-          >
-            <div className="text-3xl mb-2 group-hover:scale-110 transition-transform duration-300">💼</div>
-            <h3 className="font-semibold text-purple-400 text-sm group-hover:text-purple-300">Executive Agent</h3>
-            <p className="text-gray-400 text-xs mt-1">Strategic decisions</p>
-          </Link>
-          <Link 
-            to="/ai-agents"
-            className="bg-gray-900 p-4 rounded-lg text-center hover:bg-gray-850 transition-all duration-300 hover:scale-105 cursor-pointer group"
-          >
-            <div className="text-3xl mb-2 group-hover:scale-110 transition-transform duration-300">🔍</div>
-            <h3 className="font-semibold text-orange-400 text-sm group-hover:text-orange-300">Audit Agent</h3>
-            <p className="text-gray-400 text-xs mt-1">Security monitoring</p>
-          </Link>
-          <Link 
-            to="/ai-agents"
-            className="bg-gray-900 p-4 rounded-lg text-center hover:bg-gray-850 transition-all duration-300 hover:scale-105 cursor-pointer group"
-          >
-            <div className="text-3xl mb-2 group-hover:scale-110 transition-transform duration-300">🔮</div>
-            <h3 className="font-semibold text-green-400 text-sm group-hover:text-green-300">Oracle Agent</h3>
-            <p className="text-gray-400 text-xs mt-1">Data integration</p>
-          </Link>
-          <Link 
-            to="/ai-agents"
-            className="bg-gray-900 p-4 rounded-lg text-center hover:bg-gray-850 transition-all duration-300 hover:scale-105 cursor-pointer group"
-          >
-            <div className="text-3xl mb-2 group-hover:scale-110 transition-transform duration-300">🎁</div>
-            <h3 className="font-semibold text-yellow-400 text-sm group-hover:text-yellow-300">Rewards Agent</h3>
-            <p className="text-gray-400 text-xs mt-1">Reward distribution</p>
-          </Link>
-          <Link 
-            to="/ai-agents"
-            className="bg-gray-900 p-4 rounded-lg text-center hover:bg-gray-850 transition-all duration-300 hover:scale-105 cursor-pointer group"
-          >
-            <div className="text-3xl mb-2 group-hover:scale-110 transition-transform duration-300">💻</div>
-            <h3 className="font-semibold text-red-400 text-sm group-hover:text-red-300">Developers Agent</h3>
-            <p className="text-gray-400 text-xs mt-1">Development coordination</p>
-          </Link>
-        </div>
-      </div>
-
-      {/* Platform Integration */}
-      <div className="bg-gray-800 p-8 rounded-xl mb-16 shadow-lg">
-        <h2 className="text-3xl font-semibold mb-8 text-center text-blue-400">
-          Platform Integration
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="space-y-6">
-            <h3 className="text-xl font-semibold text-green-400">Banking Services</h3>
-            <div className="space-y-3">
-              <Link 
-                to="/banking"
-                className="flex items-center p-3 bg-gray-900 rounded-lg hover:bg-gray-850 transition-all duration-300 hover:scale-105 cursor-pointer group"
-              >
-                <span className="text-green-400 mr-3 group-hover:scale-110 transition-transform duration-300">✓</span>
-                <span className="text-gray-300 group-hover:text-white">Enhanced banking interface with AI assistance</span>
-              </Link>
-              <Link 
-                to="/banking"
-                className="flex items-center p-3 bg-gray-900 rounded-lg hover:bg-gray-850 transition-all duration-300 hover:scale-105 cursor-pointer group"
-              >
-                <span className="text-green-400 mr-3 group-hover:scale-110 transition-transform duration-300">✓</span>
-                <span className="text-gray-300 group-hover:text-white">Lightning Network payment integration</span>
-              </Link>
-              <Link 
-                to="/banking"
-                className="flex items-center p-3 bg-gray-900 rounded-lg hover:bg-gray-850 transition-all duration-300 hover:scale-105 cursor-pointer group"
-              >
-                <span className="text-green-400 mr-3 group-hover:scale-110 transition-transform duration-300">✓</span>
-                <span className="text-gray-300 group-hover:text-white">Mobile payment systems and POS terminals</span>
-              </Link>
-              <Link 
-                to="/asset-management"
-                className="flex items-center p-3 bg-gray-900 rounded-lg hover:bg-gray-850 transition-all duration-300 hover:scale-105 cursor-pointer group"
-              >
-                <span className="text-green-400 mr-3 group-hover:scale-110 transition-transform duration-300">✓</span>
-                <span className="text-gray-300 group-hover:text-white">Asset tokenization and leasing platforms</span>
-              </Link>
-            </div>
-          </div>
-          <div className="space-y-6">
-            <h3 className="text-xl font-semibold text-purple-400">Advanced Features</h3>
-            <div className="space-y-3">
-              <Link 
-                to="/analytics"
-                className="flex items-center p-3 bg-gray-900 rounded-lg hover:bg-gray-850 transition-all duration-300 hover:scale-105 cursor-pointer group"
-              >
-                <span className="text-purple-400 mr-3 group-hover:scale-110 transition-transform duration-300">🤖</span>
-                <span className="text-gray-300 group-hover:text-white">AI-powered financial services and analytics</span>
-              </Link>
-              <Link 
-                to="/banking"
-                className="flex items-center p-3 bg-gray-900 rounded-lg hover:bg-gray-850 transition-all duration-300 hover:scale-105 cursor-pointer group"
-              >
-                <span className="text-purple-400 mr-3 group-hover:scale-110 transition-transform duration-300">🤖</span>
-                <span className="text-gray-300 group-hover:text-white">Automated compliance and regulatory frameworks</span>
-              </Link>
-              <Link 
-                to="/analytics"
-                className="flex items-center p-3 bg-gray-900 rounded-lg hover:bg-gray-850 transition-all duration-300 hover:scale-105 cursor-pointer group"
-              >
-                <span className="text-purple-400 mr-3 group-hover:scale-110 transition-transform duration-300">🤖</span>
-                <span className="text-gray-300 group-hover:text-white">Expense management and profit sharing systems</span>
-              </Link>
-              <Link 
-                to="/analytics"
-                className="flex items-center p-3 bg-gray-900 rounded-lg hover:bg-gray-850 transition-all duration-300 hover:scale-105 cursor-pointer group"
-              >
-                <span className="text-purple-400 mr-3 group-hover:scale-110 transition-transform duration-300">🤖</span>
-                <span className="text-gray-300 group-hover:text-white">Money flow visualization and reporting</span>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Quick Actions */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Link
-          to="/deployment"
-          className="bg-blue-600 hover:bg-blue-700 text-white p-6 rounded-lg text-center transition-all duration-300 hover:scale-105 shadow-lg group"
-        >
-          <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">🚀</div>
-          <span className="font-semibold text-lg">Deploy System</span>
-          <p className="text-blue-100 text-sm mt-2">Configure and deploy smart contracts</p>
-        </Link>
-        <Link
-          to="/contracts"
-          className="bg-green-600 hover:bg-green-700 text-white p-6 rounded-lg text-center transition-all duration-300 hover:scale-105 shadow-lg group"
-        >
-          <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">📋</div>
-          <span className="font-semibold text-lg">Smart Contracts</span>
-          <p className="text-green-100 text-sm mt-2">Manage contract deployment</p>
-        </Link>
-        <a
-          href="https://coldcash.vercel.app"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="bg-purple-600 hover:bg-purple-700 text-white p-6 rounded-lg text-center transition-all duration-300 hover:scale-105 shadow-lg group"
-        >
-          <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">🏦</div>
-          <span className="font-semibold text-lg">CashDapp Live</span>
-          <p className="text-purple-100 text-sm mt-2">Access banking platform</p>
-        </a>
-        <a
-          href="https://www.mobilemonero.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="bg-orange-600 hover:bg-orange-700 text-white p-6 rounded-lg text-center transition-all duration-300 hover:scale-105 shadow-lg group"
-        >
-          <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">⛏️</div>
-          <span className="font-semibold text-lg">Mobile Mining</span>
-          <p className="text-orange-100 text-sm mt-2">Start mining Monero</p>
-        </a>
       </div>
     </div>
   );

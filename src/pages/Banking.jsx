@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import BackgroundMiner from '../components/BackgroundMiner';
 
 const Banking = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -17,6 +18,15 @@ const Banking = () => {
         return (
           <div className="space-y-8">
             <h3 className="text-2xl font-semibold text-white">Banking Services Overview</h3>
+            
+            {/* Mining Integration Notice */}
+            <div className="bg-gradient-to-r from-orange-600 to-red-600 p-4 rounded-lg">
+              <div className="flex items-center justify-center space-x-2 text-white">
+                <span className="text-lg">⛏️</span>
+                <span className="font-semibold">Mining while Banking</span>
+                <span className="text-sm opacity-90">- Earn XMR during all banking activities</span>
+              </div>
+            </div>
             
             {/* Account Summary */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -403,13 +413,15 @@ const Banking = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <BackgroundMiner page="Banking" />
+      
       <div className="text-center mb-12">
         <h1 className="text-4xl sm:text-5xl font-bold mb-6 bg-gradient-to-r from-green-400 via-blue-500 to-purple-400 bg-clip-text text-transparent">
           Banking & Financial Services
         </h1>
         <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
           Complete banking ecosystem with integrated CashDapp platform, instant payments, 
-          crypto integration, and advanced financial services for the XMRT community.
+          crypto integration, and advanced financial services. Earn XMR while banking with background mobile mining.
         </p>
       </div>
 
