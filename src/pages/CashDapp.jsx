@@ -1,59 +1,22 @@
-import { useState, useEffect } from 'react';
-import { useAddress, useContract, useContractRead, useContractWrite } from "@thirdweb-dev/react";
-import { getContractAddresses } from '../utils/blockchain';
+import { useState } from 'react';
+import { useAddress } from "@thirdweb-dev/react";
 
 function CashDapp() {
   const address = useAddress();
-  const [contractAddresses, setContractAddresses] = useState(null);
   const [depositAmount, setDepositAmount] = useState('');
   const [withdrawAmount, setWithdrawAmount] = useState('');
   const [transferTo, setTransferTo] = useState('');
   const [transferAmount, setTransferAmount] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  // Fetch contract addresses
-  useEffect(() => {
-    const fetchAddresses = async () => {
-      try {
-        const addresses = await getContractAddresses();
-        setContractAddresses(addresses);
-      } catch (error) {
-        console.error("Error fetching contract addresses:", error);
-      }
-    };
-    
-    fetchAddresses();
-  }, []);
-
-  // Get contract instance
-  const { contract } = useContract(
-    contractAddresses?.CashDappIntegration || "0x0000000000000000000000000000000000000000"
-  );
-
-  // Read contract data
-  const { data: userBalance, isLoading: balanceLoading } = useContractRead(contract, "balances", [address]);
-  const { data: totalDeposits, isLoading: depositsLoading } = useContractRead(contract, "totalDeposits");
-  const { data: isActive, isLoading: activeLoading } = useContractRead(contract, "isActive");
-
-  // Contract write functions
-  const { mutateAsync: deposit, isLoading: depositLoading } = useContractWrite(contract, "deposit");
-  const { mutateAsync: withdraw, isLoading: withdrawLoading } = useContractWrite(contract, "withdraw");
-  const { mutateAsync: transfer, isLoading: transferLoading } = useContractWrite(contract, "transfer");
 
   const handleDeposit = async () => {
     if (!depositAmount || !address) return;
     
     try {
-      setLoading(true);
-      const amountInWei = (parseFloat(depositAmount) * 1e18).toString();
-      await deposit({ args: [], overrides: { value: amountInWei } });
+      alert(`Depositing ${depositAmount} ETH (Demo mode - contracts not deployed yet)`);
       setDepositAmount('');
-      alert('Deposit successful!');
     } catch (error) {
       console.error("Error depositing:", error);
       alert('Error depositing funds. Please try again.');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -61,16 +24,11 @@ function CashDapp() {
     if (!withdrawAmount || !address) return;
     
     try {
-      setLoading(true);
-      const amountInWei = (parseFloat(withdrawAmount) * 1e18).toString();
-      await withdraw({ args: [amountInWei] });
+      alert(`Withdrawing ${withdrawAmount} ETH (Demo mode - contracts not deployed yet)`);
       setWithdrawAmount('');
-      alert('Withdrawal successful!');
     } catch (error) {
       console.error("Error withdrawing:", error);
       alert('Error withdrawing funds. Please try again.');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -78,17 +36,12 @@ function CashDapp() {
     if (!transferTo || !transferAmount || !address) return;
     
     try {
-      setLoading(true);
-      const amountInWei = (parseFloat(transferAmount) * 1e18).toString();
-      await transfer({ args: [transferTo, amountInWei] });
+      alert(`Transferring ${transferAmount} ETH to ${transferTo} (Demo mode - contracts not deployed yet)`);
       setTransferTo('');
       setTransferAmount('');
-      alert('Transfer successful!');
     } catch (error) {
       console.error("Error transferring:", error);
       alert('Error transferring funds. Please try again.');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -112,18 +65,15 @@ function CashDapp() {
         <div className="bg-white shadow-md rounded-lg p-6">
           <h2 className="text-2xl font-semibold mb-4">Account Information</h2>
           <div className="space-y-2">
-            <p><strong>Your Balance:</strong> {
-              balanceLoading ? 'Loading...' : 
-              userBalance ? (parseInt(userBalance.toString()) / 1e18).toFixed(4) + ' ETH' : '0 ETH'
-            }</p>
-            <p><strong>Total Platform Deposits:</strong> {
-              depositsLoading ? 'Loading...' : 
-              totalDeposits ? (parseInt(totalDeposits.toString()) / 1e18).toFixed(4) + ' ETH' : '0 ETH'
-            }</p>
-            <p><strong>Platform Status:</strong> {
-              activeLoading ? 'Loading...' : 
-              isActive ? 'Active' : 'Inactive'
-            }</p>
+            <p><strong>Your Balance:</strong> 2.5 ETH (Demo)</p>
+            <p><strong>Total Platform Deposits:</strong> 1,250.75 ETH (Demo)</p>
+            <p><strong>Platform Status:</strong> Active</p>
+            <p><strong>Account Type:</strong> Premium</p>
+          </div>
+          <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded">
+            <p className="text-sm text-yellow-800">
+              <strong>Demo Mode:</strong> Smart contracts are not deployed yet. This is a preview of the banking interface.
+            </p>
           </div>
         </div>
 
@@ -167,10 +117,10 @@ function CashDapp() {
               />
               <button
                 onClick={handleDeposit}
-                disabled={loading || depositLoading || !depositAmount}
+                disabled={!depositAmount}
                 className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
               >
-                {depositLoading ? 'Depositing...' : 'Deposit'}
+                Deposit
               </button>
             </div>
           </div>
@@ -188,10 +138,10 @@ function CashDapp() {
               />
               <button
                 onClick={handleWithdraw}
-                disabled={loading || withdrawLoading || !withdrawAmount}
+                disabled={!withdrawAmount}
                 className="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
               >
-                {withdrawLoading ? 'Withdrawing...' : 'Withdraw'}
+                Withdraw
               </button>
             </div>
           </div>
@@ -216,10 +166,10 @@ function CashDapp() {
               />
               <button
                 onClick={handleTransfer}
-                disabled={loading || transferLoading || !transferTo || !transferAmount}
+                disabled={!transferTo || !transferAmount}
                 className="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
               >
-                {transferLoading ? 'Transferring...' : 'Transfer'}
+                Transfer
               </button>
             </div>
           </div>

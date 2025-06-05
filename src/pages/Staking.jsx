@@ -1,56 +1,21 @@
-import { useState, useEffect } from 'react';
-import { useAddress, useContract, useContractRead, useContractWrite } from "@thirdweb-dev/react";
-import { getContractAddresses } from '../utils/blockchain';
+import { useState } from 'react';
+import { useAddress } from "@thirdweb-dev/react";
 
 function Staking() {
   const address = useAddress();
-  const [contractAddresses, setContractAddresses] = useState(null);
   const [stakeAmount, setStakeAmount] = useState('');
   const [unstakeAmount, setUnstakeAmount] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  // Fetch contract addresses
-  useEffect(() => {
-    const fetchAddresses = async () => {
-      try {
-        const addresses = await getContractAddresses();
-        setContractAddresses(addresses);
-      } catch (error) {
-        console.error("Error fetching contract addresses:", error);
-      }
-    };
-    
-    fetchAddresses();
-  }, []);
-
-  // Get contract instance
-  const { contract } = useContract(
-    contractAddresses?.XMART || "0x0000000000000000000000000000000000000000"
-  );
-
-  // Read contract data
-  const { data: balance, isLoading: balanceLoading } = useContractRead(contract, "balanceOf", [address]);
-  const { data: stakedBalance, isLoading: stakedLoading } = useContractRead(contract, "stakedBalance", [address]);
-  const { data: rewardRate, isLoading: rewardLoading } = useContractRead(contract, "rewardRate");
-
-  // Contract write functions
-  const { mutateAsync: stake, isLoading: stakeLoading } = useContractWrite(contract, "stake");
-  const { mutateAsync: unstake, isLoading: unstakeLoading } = useContractWrite(contract, "unstake");
 
   const handleStake = async () => {
     if (!stakeAmount || !address) return;
     
     try {
-      setLoading(true);
-      const amountInWei = (parseFloat(stakeAmount) * 1e18).toString();
-      await stake({ args: [amountInWei] });
+      // Placeholder for staking functionality
+      alert(`Staking ${stakeAmount} XMART tokens (Demo mode - contracts not deployed yet)`);
       setStakeAmount('');
-      alert('Staking successful!');
     } catch (error) {
       console.error("Error staking:", error);
       alert('Error staking tokens. Please try again.');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -58,16 +23,12 @@ function Staking() {
     if (!unstakeAmount || !address) return;
     
     try {
-      setLoading(true);
-      const amountInWei = (parseFloat(unstakeAmount) * 1e18).toString();
-      await unstake({ args: [amountInWei] });
+      // Placeholder for unstaking functionality
+      alert(`Unstaking ${unstakeAmount} XMART tokens (Demo mode - contracts not deployed yet)`);
       setUnstakeAmount('');
-      alert('Unstaking successful!');
     } catch (error) {
       console.error("Error unstaking:", error);
       alert('Error unstaking tokens. Please try again.');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -91,18 +52,15 @@ function Staking() {
         <div className="bg-white shadow-md rounded-lg p-6">
           <h2 className="text-2xl font-semibold mb-4">Your Staking Info</h2>
           <div className="space-y-2">
-            <p><strong>Wallet Balance:</strong> {
-              balanceLoading ? 'Loading...' : 
-              balance ? (parseInt(balance.toString()) / 1e18).toFixed(4) + ' XMART' : '0 XMART'
-            }</p>
-            <p><strong>Staked Balance:</strong> {
-              stakedLoading ? 'Loading...' : 
-              stakedBalance ? (parseInt(stakedBalance.toString()) / 1e18).toFixed(4) + ' XMART' : '0 XMART'
-            }</p>
-            <p><strong>Reward Rate:</strong> {
-              rewardLoading ? 'Loading...' : 
-              rewardRate ? (parseInt(rewardRate.toString()) / 100).toFixed(2) + '% APY' : '0% APY'
-            }</p>
+            <p><strong>Wallet Balance:</strong> 1,000 XMART (Demo)</p>
+            <p><strong>Staked Balance:</strong> 500 XMART (Demo)</p>
+            <p><strong>Reward Rate:</strong> 8.5% APY (Demo)</p>
+            <p><strong>Pending Rewards:</strong> 12.5 XMART (Demo)</p>
+          </div>
+          <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded">
+            <p className="text-sm text-yellow-800">
+              <strong>Demo Mode:</strong> Smart contracts are not deployed yet. This is a preview of the staking interface.
+            </p>
           </div>
         </div>
 
@@ -123,10 +81,10 @@ function Staking() {
               />
               <button
                 onClick={handleStake}
-                disabled={loading || stakeLoading || !stakeAmount}
+                disabled={!stakeAmount}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
               >
-                {stakeLoading ? 'Staking...' : 'Stake'}
+                Stake
               </button>
             </div>
           </div>
@@ -144,10 +102,10 @@ function Staking() {
               />
               <button
                 onClick={handleUnstake}
-                disabled={loading || unstakeLoading || !unstakeAmount}
+                disabled={!unstakeAmount}
                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
               >
-                {unstakeLoading ? 'Unstaking...' : 'Unstake'}
+                Unstake
               </button>
             </div>
           </div>

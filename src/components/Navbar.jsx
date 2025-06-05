@@ -17,17 +17,24 @@ function Navbar() {
     }
   }, [errorMessage]);
   
-  // Handle connection status changes
+  // Handle connection status changes with error handling
   useEffect(() => {
-    if (connectionStatus === "disconnected") {
-      console.log("Wallet disconnected");
-    } else if (connectionStatus === "connecting") {
-      console.log("Connecting wallet...");
-    } else if (connectionStatus === "connected") {
-      console.log("Wallet connected:", address);
-    } else if (connectionStatus === "error") {
-      console.error("Error connecting wallet");
-      setErrorMessage("Error connecting wallet. Please try again.");
+    try {
+      console.log('Connection status changed:', connectionStatus);
+      console.log('Address:', address);
+      
+      if (connectionStatus === "disconnected") {
+        console.log("Wallet disconnected");
+      } else if (connectionStatus === "connecting") {
+        console.log("Connecting wallet...");
+      } else if (connectionStatus === "connected") {
+        console.log("Wallet connected:", address);
+      } else if (connectionStatus === "unknown") {
+        console.log("Connection status unknown");
+      }
+    } catch (error) {
+      console.error("Error in connection status handler:", error);
+      setErrorMessage("Connection error occurred");
     }
   }, [connectionStatus, address]);
 
@@ -43,19 +50,12 @@ function Navbar() {
           <Link to="/dao" className="text-white hover:text-gray-300">DAO</Link>
           
           {errorMessage && (
-            <div className="text-red-500 mr-2">{errorMessage}</div>
+            <div className="text-red-500 mr-2 text-sm">{errorMessage}</div>
           )}
           
           <ConnectWallet 
             theme="dark"
             btnTitle="Connect Wallet"
-            modalTitle="Connect to XMRT Ecosystem"
-            modalSize="wide"
-            welcomeScreen={{
-              title: "Welcome to XMRT Ecosystem",
-              subtitle: "Connect your wallet to get started",
-            }}
-            modalTitleIconUrl="https://example.com/icon.png"
           />
         </div>
       </div>
