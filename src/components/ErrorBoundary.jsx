@@ -12,8 +12,9 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    // Log the error to console for debugging
-    console.error('Error caught by boundary:', error, errorInfo);
+    // Log the error details
+    console.error('ErrorBoundary caught an error:', error, errorInfo);
+    
     this.setState({
       error: error,
       errorInfo: errorInfo
@@ -22,32 +23,47 @@ class ErrorBoundary extends React.Component {
 
   render() {
     if (this.state.hasError) {
-      // Fallback UI
+      // You can render any custom fallback UI
       return (
-        <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-          <div className="bg-white shadow-md rounded-lg p-8 max-w-md w-full mx-4">
-            <h2 className="text-2xl font-bold text-red-600 mb-4">Something went wrong</h2>
-            <p className="text-gray-600 mb-4">
-              The application encountered an error. Please try refreshing the page.
-            </p>
-            <button
-              onClick={() => window.location.reload()}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
-            >
-              Refresh Page
-            </button>
-            {process.env.NODE_ENV === 'development' && (
-              <details className="mt-4">
-                <summary className="cursor-pointer text-sm text-gray-500">
-                  Error Details (Development)
-                </summary>
-                <pre className="mt-2 text-xs bg-gray-100 p-2 rounded overflow-auto">
-                  {this.state.error && this.state.error.toString()}
-                  <br />
-                  {this.state.errorInfo.componentStack}
-                </pre>
-              </details>
+        <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+          <div className="bg-white shadow-lg rounded-lg p-8 max-w-2xl w-full">
+            <div className="text-center mb-6">
+              <h1 className="text-3xl font-bold text-red-600 mb-4">Something went wrong</h1>
+              <p className="text-gray-600 mb-6">
+                The application encountered an error. Please try refreshing the page.
+              </p>
+              
+              <button
+                onClick={() => window.location.reload()}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+              >
+                Refresh Page
+              </button>
+            </div>
+            
+            {/* Show error details in development */}
+            {import.meta.env.DEV && this.state.error && (
+              <div className="mt-8 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <h3 className="text-lg font-semibold text-red-800 mb-2">Error Details (Development Mode)</h3>
+                <div className="text-sm text-red-700 mb-4">
+                  <strong>Error:</strong> {this.state.error.toString()}
+                </div>
+                {this.state.errorInfo && (
+                  <div className="text-sm text-red-700">
+                    <strong>Component Stack:</strong>
+                    <pre className="mt-2 whitespace-pre-wrap text-xs bg-red-100 p-2 rounded overflow-auto max-h-40">
+                      {this.state.errorInfo.componentStack}
+                    </pre>
+                  </div>
+                )}
+              </div>
             )}
+            
+            <div className="mt-6 text-center">
+              <p className="text-sm text-gray-500">
+                If this problem persists, please check the browser console for more details.
+              </p>
+            </div>
           </div>
         </div>
       );

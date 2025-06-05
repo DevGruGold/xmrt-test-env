@@ -1,16 +1,9 @@
-import { getSDK, getReadOnlySDK } from './thirdwebUtils';
-import { Sepolia } from "@thirdweb-dev/chains";
-import { ethers } from 'ethers';
-
-// Contract ABIs
-import XMART_ABI from '../contracts/artifacts/XMART.json';
-import MoneroPool_ABI from '../contracts/artifacts/MoneroPool.json';
-import CashDappIntegration_ABI from '../contracts/artifacts/CashDappIntegration.json';
+// Simplified blockchain utilities to avoid import errors
 
 // Contract addresses - these would be updated after deployment
 const CONTRACT_ADDRESSES = {
   // Sepolia testnet addresses
-  [Sepolia.chainId]: {
+  11155111: {
     XMART: import.meta.env.VITE_XMART_ADDRESS || '0x0000000000000000000000000000000000000000',
     MoneroPool: import.meta.env.VITE_MONERO_POOL_ADDRESS || '0x0000000000000000000000000000000000000000',
     CashDappIntegration: import.meta.env.VITE_CASH_DAPP_ADDRESS || '0x0000000000000000000000000000000000000000'
@@ -27,69 +20,27 @@ const CONTRACT_ADDRESSES = {
 const getNetwork = async () => {
   try {
     if (window.ethereum) {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const network = await provider.getNetwork();
-      return network.chainId;
+      const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+      return parseInt(chainId, 16);
     }
-    return Sepolia.chainId; // Default to Sepolia
+    return 11155111; // Default to Sepolia
   } catch (error) {
     console.error("Error getting network:", error);
-    return Sepolia.chainId; // Default to Sepolia on error
+    return 11155111; // Default to Sepolia on error
   }
 };
 
 // Get contract addresses for the current network
 const getContractAddresses = async () => {
   const chainId = await getNetwork();
-  return CONTRACT_ADDRESSES[chainId] || CONTRACT_ADDRESSES[Sepolia.chainId];
+  return CONTRACT_ADDRESSES[chainId] || CONTRACT_ADDRESSES[11155111];
 };
 
-// Get a contract instance using ThirdWeb
-const getContract = async (contractName, signer = null) => {
-  try {
-    const addresses = await getContractAddresses();
-    const address = addresses[contractName];
-    
-    if (!address || address === '0x0000000000000000000000000000000000000000') {
-      console.error(`Contract address for ${contractName} not set`);
-      return null;
-    }
-    
-    let abi;
-    switch (contractName) {
-      case 'XMART':
-        abi = XMART_ABI.abi;
-        break;
-      case 'MoneroPool':
-        abi = MoneroPool_ABI.abi;
-        break;
-      case 'CashDappIntegration':
-        abi = CashDappIntegration_ABI.abi;
-        break;
-      default:
-        console.error(`Unknown contract: ${contractName}`);
-        return null;
-    }
-    
-    if (signer) {
-      const sdk = await getSDK(signer);
-      return await sdk.getContract(address, abi);
-    } else {
-      const sdk = getReadOnlySDK();
-      return await sdk.getContract(address, abi);
-    }
-  } catch (error) {
-    console.error(`Error getting ${contractName} contract:`, error);
-    return null;
-  }
-};
-
-// Connect wallet using ThirdWeb
+// Connect wallet
 const connectWallet = async () => {
   try {
     if (window.ethereum) {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const accounts = await provider.send("eth_requestAccounts", []);
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       return accounts[0];
     } else {
       throw new Error("Ethereum wallet not found");
@@ -104,8 +55,7 @@ const connectWallet = async () => {
 const getAccount = async () => {
   try {
     if (window.ethereum) {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const accounts = await provider.listAccounts();
+      const accounts = await window.ethereum.request({ method: 'eth_accounts' });
       return accounts.length > 0 ? accounts[0] : null;
     }
     return null;
@@ -132,14 +82,20 @@ const getMoneroPoolWallet = () => {
     "46GAxLnJHpJMKwp5fuUPssKLqW2pukXuEXV9cLi8u5T8g9ENEiugbupMtjBt9jbGPtgi1EHvSxiWdDNHzpeDiTc1MFSuScD";
 };
 
+// Check if contracts are deployed
+const areContractsDeployed = async () => {
+  const addresses = await getContractAddresses();
+  return addresses.XMART !== '0x0000000000000000000000000000000000000000';
+};
+
 export {
   getNetwork,
   getContractAddresses,
-  getContract,
   connectWallet,
   getAccount,
   formatAddress,
   formatDate,
-  getMoneroPoolWallet
+  getMoneroPoolWallet,
+  areContractsDeployed
 };
 
