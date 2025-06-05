@@ -27,4 +27,27 @@ dist-ssr
 .env
 .env.*
 !.env.example
+!.env.deployment
+
+# Hardhat files
+cache
+artifacts
+deployments/*.json
+deployments/*.txt
+
+# Coverage reports
+coverage
+coverage.json
+
+# TypeChain
+typechain
+typechain-types
+
+# Solidity coverage
+.coverage_artifacts
+.coverage_cache
+.coverage_contracts
+
+# Hardhat Ignition default folder for deployments against a local node
+ignition/deployments/chain-31337
 
