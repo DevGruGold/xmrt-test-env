@@ -6,17 +6,20 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navItems = [
-    { path: '/', label: 'Home', icon: '🏠' },
-    { path: '/staking', label: 'Staking', icon: '💰' },
-    { path: '/mining', label: 'Mining', icon: '⛏️' },
-    { path: '/cashdapp', label: 'CashDapp', icon: '🏦' },
-    { path: '/dao', label: 'DAO', icon: '🗳️' },
-    { path: '/ai-agents', label: 'AI Agents', icon: '🤖' },
-    { path: '/analytics', label: 'Analytics', icon: '📊' },
-    { path: '/asset-management', label: 'Assets', icon: '💎' },
-    { path: '/banking', label: 'Banking', icon: '🏛️' },
-    { path: '/deployment', label: 'Deploy', icon: '🚀' },
-    { path: '/contracts', label: 'Contracts', icon: '📋' }
+    { path: '/', name: 'Home', icon: '🏠' },
+    { path: '/staking', name: 'Staking', icon: '💎' },
+    { path: '/mining', name: 'Mining', icon: '⛏️' },
+    { path: '/cashdapp', name: 'CashDapp', icon: '🏦' },
+    { path: '/dao', name: 'DAO', icon: '🗳️' },
+    { path: '/ai-agents', name: 'AI Agents', icon: '🤖' },
+    { path: '/analytics', name: 'Analytics', icon: '📊' },
+    { path: '/asset-management', name: 'Assets', icon: '💼' },
+    { path: '/banking', name: 'Banking', icon: '🏛️' },
+    { path: '/quantum-tarot', name: 'Quantum Tarot', icon: '🔮' },
+    { path: '/profit-tracker', name: 'Profits', icon: '📈' },
+    { path: '/asset-tokenizer', name: 'Tokenizer', icon: '🏠' },
+    { path: '/deployment', name: 'Deploy', icon: '🚀' },
+    { path: '/contracts', name: 'Contracts', icon: '📋' }
   ];
 
   const toggleMobileMenu = () => {
