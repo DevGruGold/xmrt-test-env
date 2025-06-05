@@ -16,7 +16,7 @@ const Mining = () => {
             <div className="flex justify-between">
               <span className="text-gray-400">Pool Wallet:</span>
               <span className="text-blue-400 text-sm break-all">
-                46GAxLnJHpJMKwp5fuUPssKLqW2pukXuEXV9cLi8u5T8g9ENEiugbupMtjBt9jbGPtgi1EHvSxiWdDNHzpeDiTc1MFSuScD
+                46UxNFuGM2E3UwmZWWJicaRPoRwqwW4byQkaTHkX8yPcVihp91qAVtSFipWUGJJUyTXgzSqxzDQtNLf2bsp2DX2qCCgC5mg
               </span>
             </div>
             <div className="flex justify-between">
