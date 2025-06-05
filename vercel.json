@@ -3,11 +3,6 @@
   "outputDirectory": "dist",
   "installCommand": "npm install",
   "ignoreCommand": "git diff --quiet HEAD^ HEAD -- contracts/ scripts/ test/ hardhat.config.js hardhat.config.cjs contracts-package.json CONTRACTS_README.md",
-  "functions": {
-    "src/pages/api/*.js": {
-      "runtime": "@vercel/node"
-    }
-  },
   "rewrites": [
     {
       "source": "/(.*)",
