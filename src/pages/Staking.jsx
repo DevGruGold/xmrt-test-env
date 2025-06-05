@@ -1,236 +1,177 @@
 import { useState, useEffect } from 'react';
-import { ethers } from 'ethers';
+import { useAddress, useContract, useContractRead, useContractWrite } from "@thirdweb-dev/react";
+import { getContractAddresses } from '../utils/blockchain';
 
 function Staking() {
-  const [account, setAccount] = useState('');
-  const [balance, setBalance] = useState('0');
-  const [stakedBalance, setStakedBalance] = useState('0');
+  const address = useAddress();
+  const [contractAddresses, setContractAddresses] = useState(null);
   const [stakeAmount, setStakeAmount] = useState('');
   const [unstakeAmount, setUnstakeAmount] = useState('');
   const [loading, setLoading] = useState(false);
-  const [rewardRate, setRewardRate] = useState('0');
-  const [isConnected, setIsConnected] = useState(false);
 
+  // Fetch contract addresses
   useEffect(() => {
-    const checkConnection = async () => {
-      if (window.ethereum) {
-        try {
-          const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-          if (accounts.length > 0) {
-            setAccount(accounts[0]);
-            setIsConnected(true);
-            fetchBalances(accounts[0]);
-          }
-        } catch (error) {
-          console.error("Error checking connection:", error);
-        }
+    const fetchAddresses = async () => {
+      try {
+        const addresses = await getContractAddresses();
+        setContractAddresses(addresses);
+      } catch (error) {
+        console.error("Error fetching contract addresses:", error);
       }
     };
-
-    checkConnection();
+    
+    fetchAddresses();
   }, []);
 
-  const connectWallet = async () => {
-    if (window.ethereum) {
-      try {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        setAccount(accounts[0]);
-        setIsConnected(true);
-        fetchBalances(accounts[0]);
-      } catch (error) {
-        console.error("Error connecting to wallet:", error);
-      }
-    } else {
-      alert("Please install MetaMask or another Ethereum wallet");
-    }
-  };
+  // Get contract instance
+  const { contract } = useContract(
+    contractAddresses?.XMART || "0x0000000000000000000000000000000000000000"
+  );
 
-  const fetchBalances = async (address) => {
-    if (window.ethereum) {
-      try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        // This would be replaced with the actual contract address when deployed
-        const contractAddress = '0x0000000000000000000000000000000000000000';
-        
-        // This is a simplified ABI for demonstration
-        const abi = [
-          "function balanceOf(address) view returns (uint256)",
-          "function stakedBalance(address) view returns (uint256)",
-          "function rewardRate() view returns (uint256)"
-        ];
-        
-        const tokenContract = new ethers.Contract(contractAddress, abi, provider);
-        
-        const balanceWei = await tokenContract.balanceOf(address);
-        const stakedBalanceWei = await tokenContract.stakedBalance(address);
-        const rewardRateWei = await tokenContract.rewardRate();
-        
-        setBalance(ethers.utils.formatEther(balanceWei));
-        setStakedBalance(ethers.utils.formatEther(stakedBalanceWei));
-        setRewardRate(ethers.utils.formatEther(rewardRateWei));
-      } catch (error) {
-        console.error("Error fetching balances:", error);
-      }
-    }
-  };
+  // Read contract data
+  const { data: balance, isLoading: balanceLoading } = useContractRead(contract, "balanceOf", [address]);
+  const { data: stakedBalance, isLoading: stakedLoading } = useContractRead(contract, "stakedBalance", [address]);
+  const { data: rewardRate, isLoading: rewardLoading } = useContractRead(contract, "rewardRate");
+
+  // Contract write functions
+  const { mutateAsync: stake, isLoading: stakeLoading } = useContractWrite(contract, "stake");
+  const { mutateAsync: unstake, isLoading: unstakeLoading } = useContractWrite(contract, "unstake");
 
   const handleStake = async () => {
-    if (!stakeAmount || parseFloat(stakeAmount) <= 0) {
-      alert("Please enter a valid amount to stake");
-      return;
-    }
-
-    if (window.ethereum) {
-      try {
-        setLoading(true);
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-        // This would be replaced with the actual contract address when deployed
-        const contractAddress = '0x0000000000000000000000000000000000000000';
-        
-        // This is a simplified ABI for demonstration
-        const abi = [
-          "function stake(uint256) returns (bool)"
-        ];
-        
-        const tokenContract = new ethers.Contract(contractAddress, abi, signer);
-        
-        const amountWei = ethers.utils.parseEther(stakeAmount);
-        const tx = await tokenContract.stake(amountWei);
-        await tx.wait();
-        
-        setStakeAmount('');
-        fetchBalances(account);
-      } catch (error) {
-        console.error("Error staking tokens:", error);
-        alert("Error staking tokens. See console for details.");
-      } finally {
-        setLoading(false);
-      }
+    if (!stakeAmount || !address) return;
+    
+    try {
+      setLoading(true);
+      const amountInWei = (parseFloat(stakeAmount) * 1e18).toString();
+      await stake({ args: [amountInWei] });
+      setStakeAmount('');
+      alert('Staking successful!');
+    } catch (error) {
+      console.error("Error staking:", error);
+      alert('Error staking tokens. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleUnstake = async () => {
-    if (!unstakeAmount || parseFloat(unstakeAmount) <= 0) {
-      alert("Please enter a valid amount to unstake");
-      return;
-    }
-
-    if (window.ethereum) {
-      try {
-        setLoading(true);
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-        // This would be replaced with the actual contract address when deployed
-        const contractAddress = '0x0000000000000000000000000000000000000000';
-        
-        // This is a simplified ABI for demonstration
-        const abi = [
-          "function unstake(uint256) returns (bool)"
-        ];
-        
-        const tokenContract = new ethers.Contract(contractAddress, abi, signer);
-        
-        const amountWei = ethers.utils.parseEther(unstakeAmount);
-        const tx = await tokenContract.unstake(amountWei);
-        await tx.wait();
-        
-        setUnstakeAmount('');
-        fetchBalances(account);
-      } catch (error) {
-        console.error("Error unstaking tokens:", error);
-        alert("Error unstaking tokens. See console for details.");
-      } finally {
-        setLoading(false);
-      }
+    if (!unstakeAmount || !address) return;
+    
+    try {
+      setLoading(true);
+      const amountInWei = (parseFloat(unstakeAmount) * 1e18).toString();
+      await unstake({ args: [amountInWei] });
+      setUnstakeAmount('');
+      alert('Unstaking successful!');
+    } catch (error) {
+      console.error("Error unstaking:", error);
+      alert('Error unstaking tokens. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
+  if (!address) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-4xl font-bold mb-8">Staking</h1>
+        <div className="bg-white shadow-md rounded-lg p-6">
+          <p className="text-center text-gray-600">Please connect your wallet to access staking features.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-8">XMRT Staking</h1>
+      <h1 className="text-4xl font-bold mb-8">Staking</h1>
       
-      {!isConnected ? (
-        <div className="bg-white shadow-md rounded-lg p-6 mb-8">
-          <p className="mb-4">Connect your wallet to access staking features.</p>
-          <button 
-            onClick={connectWallet}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Connect Wallet
-          </button>
-        </div>
-      ) : (
-        <>
-          <div className="bg-white shadow-md rounded-lg p-6 mb-8">
-            <h2 className="text-2xl font-semibold mb-4">Your Balances</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="border p-4 rounded-lg">
-                <h3 className="text-lg font-medium mb-2">Available Balance</h3>
-                <p className="text-2xl font-bold">{balance} XMART</p>
-              </div>
-              <div className="border p-4 rounded-lg">
-                <h3 className="text-lg font-medium mb-2">Staked Balance</h3>
-                <p className="text-2xl font-bold">{stakedBalance} XMART</p>
-              </div>
-              <div className="border p-4 rounded-lg">
-                <h3 className="text-lg font-medium mb-2">Annual Reward Rate</h3>
-                <p className="text-2xl font-bold">{parseFloat(rewardRate) * 100}%</p>
-              </div>
-            </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Staking Information */}
+        <div className="bg-white shadow-md rounded-lg p-6">
+          <h2 className="text-2xl font-semibold mb-4">Your Staking Info</h2>
+          <div className="space-y-2">
+            <p><strong>Wallet Balance:</strong> {
+              balanceLoading ? 'Loading...' : 
+              balance ? (parseInt(balance.toString()) / 1e18).toFixed(4) + ' XMART' : '0 XMART'
+            }</p>
+            <p><strong>Staked Balance:</strong> {
+              stakedLoading ? 'Loading...' : 
+              stakedBalance ? (parseInt(stakedBalance.toString()) / 1e18).toFixed(4) + ' XMART' : '0 XMART'
+            }</p>
+            <p><strong>Reward Rate:</strong> {
+              rewardLoading ? 'Loading...' : 
+              rewardRate ? (parseInt(rewardRate.toString()) / 100).toFixed(2) + '% APY' : '0% APY'
+            }</p>
           </div>
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-white shadow-md rounded-lg p-6">
-              <h2 className="text-2xl font-semibold mb-4">Stake Tokens</h2>
-              <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="stakeAmount">
-                  Amount to Stake
-                </label>
-                <input
-                  id="stakeAmount"
-                  type="number"
-                  value={stakeAmount}
-                  onChange={(e) => setStakeAmount(e.target.value)}
-                  placeholder="Enter amount to stake"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                />
-              </div>
+        {/* Staking Actions */}
+        <div className="bg-white shadow-md rounded-lg p-6">
+          <h2 className="text-2xl font-semibold mb-4">Staking Actions</h2>
+          
+          {/* Stake Section */}
+          <div className="mb-6">
+            <h3 className="text-lg font-medium mb-2">Stake Tokens</h3>
+            <div className="flex space-x-2">
+              <input
+                type="number"
+                placeholder="Amount to stake"
+                value={stakeAmount}
+                onChange={(e) => setStakeAmount(e.target.value)}
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
               <button
                 onClick={handleStake}
-                disabled={loading}
-                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-full"
+                disabled={loading || stakeLoading || !stakeAmount}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
               >
-                {loading ? 'Processing...' : 'Stake'}
-              </button>
-            </div>
-
-            <div className="bg-white shadow-md rounded-lg p-6">
-              <h2 className="text-2xl font-semibold mb-4">Unstake Tokens</h2>
-              <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="unstakeAmount">
-                  Amount to Unstake
-                </label>
-                <input
-                  id="unstakeAmount"
-                  type="number"
-                  value={unstakeAmount}
-                  onChange={(e) => setUnstakeAmount(e.target.value)}
-                  placeholder="Enter amount to unstake"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                />
-              </div>
-              <button
-                onClick={handleUnstake}
-                disabled={loading}
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-full"
-              >
-                {loading ? 'Processing...' : 'Unstake'}
+                {stakeLoading ? 'Staking...' : 'Stake'}
               </button>
             </div>
           </div>
-        </>
-      )}
+
+          {/* Unstake Section */}
+          <div>
+            <h3 className="text-lg font-medium mb-2">Unstake Tokens</h3>
+            <div className="flex space-x-2">
+              <input
+                type="number"
+                placeholder="Amount to unstake"
+                value={unstakeAmount}
+                onChange={(e) => setUnstakeAmount(e.target.value)}
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button
+                onClick={handleUnstake}
+                disabled={loading || unstakeLoading || !unstakeAmount}
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
+              >
+                {unstakeLoading ? 'Unstaking...' : 'Unstake'}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Staking Information */}
+      <div className="mt-8 bg-white shadow-md rounded-lg p-6">
+        <h2 className="text-2xl font-semibold mb-4">How Staking Works</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <h3 className="text-lg font-medium mb-2">1. Stake Your Tokens</h3>
+            <p className="text-gray-600">Lock your XMART tokens in the staking contract to start earning rewards.</p>
+          </div>
+          <div>
+            <h3 className="text-lg font-medium mb-2">2. Earn Rewards</h3>
+            <p className="text-gray-600">Receive rewards based on the current APY and your staked amount.</p>
+          </div>
+          <div>
+            <h3 className="text-lg font-medium mb-2">3. Participate in Governance</h3>
+            <p className="text-gray-600">Staked tokens give you voting power in DAO governance decisions.</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

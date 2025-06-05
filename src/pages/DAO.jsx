@@ -1,315 +1,286 @@
 import { useState, useEffect } from 'react';
-import { ethers } from 'ethers';
+import { useAddress, useContract, useContractRead, useContractWrite } from "@thirdweb-dev/react";
+import { getContractAddresses } from '../utils/blockchain';
+import { analyzeText, generateDAOResponse, analyzeFeedback } from '../utils/thirdwebUtils';
 
 function DAO() {
-  const [account, setAccount] = useState('');
-  const [isConnected, setIsConnected] = useState(false);
-  const [meetings, setMeetings] = useState([]);
-  const [decisions, setDecisions] = useState([]);
+  const address = useAddress();
+  const [contractAddresses, setContractAddresses] = useState(null);
+  const [proposalTitle, setProposalTitle] = useState('');
+  const [proposalDescription, setProposalDescription] = useState('');
   const [feedback, setFeedback] = useState('');
+  const [aiResponse, setAiResponse] = useState('');
+  const [sentimentAnalysis, setSentimentAnalysis] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState('meetings');
 
+  // Fetch contract addresses
   useEffect(() => {
-    const checkConnection = async () => {
-      if (window.ethereum) {
-        try {
-          const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-          if (accounts.length > 0) {
-            setAccount(accounts[0]);
-            setIsConnected(true);
-            fetchDAOData();
-          }
-        } catch (error) {
-          console.error("Error checking connection:", error);
-        }
+    const fetchAddresses = async () => {
+      try {
+        const addresses = await getContractAddresses();
+        setContractAddresses(addresses);
+      } catch (error) {
+        console.error("Error fetching contract addresses:", error);
       }
     };
-
-    checkConnection();
+    
+    fetchAddresses();
   }, []);
 
-  const connectWallet = async () => {
-    if (window.ethereum) {
-      try {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        setAccount(accounts[0]);
-        setIsConnected(true);
-        fetchDAOData();
-      } catch (error) {
-        console.error("Error connecting to wallet:", error);
-      }
-    } else {
-      alert("Please install MetaMask or another Ethereum wallet");
+  // Get contract instance
+  const { contract } = useContract(
+    contractAddresses?.XMART || "0x0000000000000000000000000000000000000000"
+  );
+
+  // Read contract data
+  const { data: proposalCount, isLoading: countLoading } = useContractRead(contract, "proposalCount");
+  const { data: votingPower, isLoading: powerLoading } = useContractRead(contract, "getVotingPower", [address]);
+  const { data: totalVotingPower, isLoading: totalPowerLoading } = useContractRead(contract, "totalVotingPower");
+
+  // Contract write functions
+  const { mutateAsync: createProposal, isLoading: createLoading } = useContractWrite(contract, "createProposal");
+  const { mutateAsync: vote, isLoading: voteLoading } = useContractWrite(contract, "vote");
+
+  const handleCreateProposal = async () => {
+    if (!proposalTitle || !proposalDescription || !address) return;
+    
+    try {
+      setLoading(true);
+      await createProposal({ args: [proposalTitle, proposalDescription] });
+      setProposalTitle('');
+      setProposalDescription('');
+      alert('Proposal created successfully!');
+    } catch (error) {
+      console.error("Error creating proposal:", error);
+      alert('Error creating proposal. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const fetchDAOData = async () => {
-    if (window.ethereum) {
-      try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        // This would be replaced with the actual contract address when deployed
-        const contractAddress = '0x0000000000000000000000000000000000000000';
-        
-        // This is a simplified ABI for demonstration
-        const abi = [
-          "function meetingCount() view returns (uint256)",
-          "function publicMeetings(uint256) view returns (string topic, uint256 timestamp, string link, bool cancelled)",
-          "function decisionCount() view returns (uint256)",
-          "function aiDecisions(uint256) view returns (string description, string rationale, uint256 timestamp, bool audited, bool valid)"
-        ];
-        
-        const xmartContract = new ethers.Contract(contractAddress, abi, provider);
-        
-        // Fetch meetings
-        const meetingCount = await xmartContract.meetingCount();
-        const meetingsArray = [];
-        
-        for (let i = 0; i < Math.min(meetingCount.toNumber(), 5); i++) {
-          const meeting = await xmartContract.publicMeetings(i);
-          meetingsArray.push({
-            id: i,
-            topic: meeting.topic,
-            timestamp: meeting.timestamp.toNumber(),
-            link: meeting.link,
-            cancelled: meeting.cancelled
-          });
-        }
-        
-        setMeetings(meetingsArray);
-        
-        // Fetch decisions
-        const decisionCount = await xmartContract.decisionCount();
-        const decisionsArray = [];
-        
-        for (let i = 0; i < Math.min(decisionCount.toNumber(), 5); i++) {
-          const decision = await xmartContract.aiDecisions(i);
-          decisionsArray.push({
-            id: i,
-            description: decision.description,
-            rationale: decision.rationale,
-            timestamp: decision.timestamp.toNumber(),
-            audited: decision.audited,
-            valid: decision.valid
-          });
-        }
-        
-        setDecisions(decisionsArray);
-      } catch (error) {
-        console.error("Error fetching DAO data:", error);
-      }
+  const handleVote = async (proposalId, support) => {
+    if (!address) return;
+    
+    try {
+      setLoading(true);
+      await vote({ args: [proposalId, support] });
+      alert('Vote cast successfully!');
+    } catch (error) {
+      console.error("Error voting:", error);
+      alert('Error casting vote. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleSubmitFeedback = async () => {
-    if (!feedback || feedback.trim() === '') {
-      alert("Please enter valid feedback");
-      return;
-    }
-
-    if (window.ethereum) {
-      try {
-        setLoading(true);
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-        // This would be replaced with the actual contract address when deployed
-        const contractAddress = '0x0000000000000000000000000000000000000000';
-        
-        // This is a simplified ABI for demonstration
-        const abi = [
-          "function submitFeedback(string) returns (bool)"
-        ];
-        
-        const xmartContract = new ethers.Contract(contractAddress, abi, signer);
-        
-        const tx = await xmartContract.submitFeedback(feedback);
-        await tx.wait();
-        
-        alert("Feedback submitted successfully.");
-        setFeedback('');
-      } catch (error) {
-        console.error("Error submitting feedback:", error);
-        alert("Error submitting feedback. See console for details.");
-      } finally {
-        setLoading(false);
-      }
+  const handleAnalyzeFeedback = async () => {
+    if (!feedback) return;
+    
+    try {
+      setLoading(true);
+      const analysis = await analyzeFeedback(feedback);
+      setSentimentAnalysis(analysis);
+      
+      const response = await generateDAOResponse(feedback);
+      setAiResponse(response.response);
+    } catch (error) {
+      console.error("Error analyzing feedback:", error);
+      alert('Error analyzing feedback. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const formatDate = (timestamp) => {
-    return new Date(timestamp * 1000).toLocaleString();
-  };
+  if (!address) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-4xl font-bold mb-8">DAO Governance</h1>
+        <div className="bg-white shadow-md rounded-lg p-6">
+          <p className="text-center text-gray-600">Please connect your wallet to access DAO features.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-8">XMRT DAO</h1>
+      <h1 className="text-4xl font-bold mb-8">DAO Governance</h1>
       
-      {!isConnected ? (
-        <div className="bg-white shadow-md rounded-lg p-6 mb-8">
-          <p className="mb-4">Connect your wallet to access DAO features.</p>
-          <button 
-            onClick={connectWallet}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Governance Information */}
+        <div className="bg-white shadow-md rounded-lg p-6">
+          <h2 className="text-2xl font-semibold mb-4">Governance Stats</h2>
+          <div className="space-y-2">
+            <p><strong>Total Proposals:</strong> {
+              countLoading ? 'Loading...' : 
+              proposalCount ? proposalCount.toString() : '0'
+            }</p>
+            <p><strong>Your Voting Power:</strong> {
+              powerLoading ? 'Loading...' : 
+              votingPower ? (parseInt(votingPower.toString()) / 1e18).toFixed(4) : '0'
+            }</p>
+            <p><strong>Total Voting Power:</strong> {
+              totalPowerLoading ? 'Loading...' : 
+              totalVotingPower ? (parseInt(totalVotingPower.toString()) / 1e18).toFixed(4) : '0'
+            }</p>
+            <p><strong>Your Voting Share:</strong> {
+              powerLoading || totalPowerLoading ? 'Loading...' : 
+              votingPower && totalVotingPower ? 
+                ((parseInt(votingPower.toString()) / parseInt(totalVotingPower.toString())) * 100).toFixed(2) + '%' : '0%'
+            }</p>
+          </div>
+        </div>
+
+        {/* AI Agent Status */}
+        <div className="bg-white shadow-md rounded-lg p-6">
+          <h2 className="text-2xl font-semibold mb-4">AI Agent Status</h2>
+          <div className="space-y-3">
+            <div className="flex justify-between items-center">
+              <span>Admin Agent</span>
+              <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm">Active</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span>Executive Agent</span>
+              <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm">Active</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span>Oracle Agent</span>
+              <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm">Active</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span>Audit Agent</span>
+              <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">Monitoring</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Create Proposal */}
+      <div className="mt-8 bg-white shadow-md rounded-lg p-6">
+        <h2 className="text-2xl font-semibold mb-4">Create Proposal</h2>
+        <div className="space-y-4">
+          <input
+            type="text"
+            placeholder="Proposal Title"
+            value={proposalTitle}
+            onChange={(e) => setProposalTitle(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <textarea
+            placeholder="Proposal Description"
+            value={proposalDescription}
+            onChange={(e) => setProposalDescription(e.target.value)}
+            rows={4}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            onClick={handleCreateProposal}
+            disabled={loading || createLoading || !proposalTitle || !proposalDescription}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
           >
-            Connect Wallet
+            {createLoading ? 'Creating...' : 'Create Proposal'}
           </button>
         </div>
-      ) : (
-        <>
-          <div className="bg-white shadow-md rounded-lg p-6 mb-8">
-            <h2 className="text-2xl font-semibold mb-4">DAO Overview</h2>
-            <p className="mb-4">
-              The XMRT DAO is managed by AI agents in executive roles. These agents make decisions, 
-              schedule meetings, and respond to community feedback to govern the XMRT ecosystem.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="border p-4 rounded-lg text-center">
-                <h3 className="text-lg font-medium mb-2">Upcoming Meetings</h3>
-                <p className="text-2xl font-bold">{meetings.filter(m => !m.cancelled && m.timestamp > Date.now() / 1000).length}</p>
-              </div>
-              <div className="border p-4 rounded-lg text-center">
-                <h3 className="text-lg font-medium mb-2">Recent Decisions</h3>
-                <p className="text-2xl font-bold">{decisions.length}</p>
-              </div>
-              <div className="border p-4 rounded-lg text-center">
-                <h3 className="text-lg font-medium mb-2">AI Agents</h3>
-                <p className="text-2xl font-bold">6</p>
-              </div>
-            </div>
-          </div>
+      </div>
 
-          <div className="bg-white shadow-md rounded-lg p-6">
-            <div className="flex border-b mb-4">
-              <button
-                className={`py-2 px-4 ${activeTab === 'meetings' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-500'}`}
-                onClick={() => setActiveTab('meetings')}
-              >
-                Meetings
-              </button>
-              <button
-                className={`py-2 px-4 ${activeTab === 'decisions' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-500'}`}
-                onClick={() => setActiveTab('decisions')}
-              >
-                AI Decisions
-              </button>
-              <button
-                className={`py-2 px-4 ${activeTab === 'feedback' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-500'}`}
-                onClick={() => setActiveTab('feedback')}
-              >
-                Submit Feedback
-              </button>
-            </div>
-
-            {activeTab === 'meetings' && (
-              <div>
-                <h2 className="text-2xl font-semibold mb-4">Public Meetings</h2>
-                {meetings.length === 0 ? (
-                  <p>No meetings scheduled.</p>
-                ) : (
-                  <div className="overflow-x-auto">
-                    <table className="min-w-full bg-white">
-                      <thead>
-                        <tr>
-                          <th className="py-2 px-4 border-b">Topic</th>
-                          <th className="py-2 px-4 border-b">Date & Time</th>
-                          <th className="py-2 px-4 border-b">Status</th>
-                          <th className="py-2 px-4 border-b">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {meetings.map((meeting) => (
-                          <tr key={meeting.id}>
-                            <td className="py-2 px-4 border-b">{meeting.topic}</td>
-                            <td className="py-2 px-4 border-b">{formatDate(meeting.timestamp)}</td>
-                            <td className="py-2 px-4 border-b">
-                              {meeting.cancelled ? (
-                                <span className="text-red-500">Cancelled</span>
-                              ) : meeting.timestamp > Date.now() / 1000 ? (
-                                <span className="text-green-500">Upcoming</span>
-                              ) : (
-                                <span className="text-gray-500">Past</span>
-                              )}
-                            </td>
-                            <td className="py-2 px-4 border-b">
-                              {!meeting.cancelled && meeting.timestamp > Date.now() / 1000 && (
-                                <a 
-                                  href={meeting.link} 
-                                  target="_blank" 
-                                  rel="noopener noreferrer"
-                                  className="text-blue-500 hover:text-blue-700"
-                                >
-                                  Join Meeting
-                                </a>
-                              )}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {activeTab === 'decisions' && (
-              <div>
-                <h2 className="text-2xl font-semibold mb-4">AI Decisions</h2>
-                {decisions.length === 0 ? (
-                  <p>No decisions recorded.</p>
-                ) : (
-                  <div className="space-y-4">
-                    {decisions.map((decision) => (
-                      <div key={decision.id} className="border p-4 rounded-lg">
-                        <h3 className="text-lg font-medium mb-2">{decision.description}</h3>
-                        <p className="text-sm text-gray-600 mb-2">{decision.rationale}</p>
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm text-gray-500">{formatDate(decision.timestamp)}</span>
-                          {decision.audited ? (
-                            <span className={`px-2 py-1 rounded text-white ${decision.valid ? 'bg-green-500' : 'bg-red-500'}`}>
-                              {decision.valid ? 'Valid' : 'Invalid'}
-                            </span>
-                          ) : (
-                            <span className="px-2 py-1 rounded bg-yellow-500 text-white">Pending Audit</span>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {activeTab === 'feedback' && (
-              <div>
-                <h2 className="text-2xl font-semibold mb-4">Submit Feedback</h2>
-                <p className="mb-4">
-                  Your feedback helps improve the XMRT ecosystem. All feedback is reviewed by the DAO's AI agents.
-                </p>
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="feedback">
-                    Your Feedback
-                  </label>
-                  <textarea
-                    id="feedback"
-                    value={feedback}
-                    onChange={(e) => setFeedback(e.target.value)}
-                    placeholder="Enter your feedback or suggestions"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    rows="4"
-                  ></textarea>
+      {/* AI Feedback Analysis */}
+      <div className="mt-8 bg-white shadow-md rounded-lg p-6">
+        <h2 className="text-2xl font-semibold mb-4">AI Feedback Analysis</h2>
+        <div className="space-y-4">
+          <textarea
+            placeholder="Enter community feedback or proposal text for AI analysis..."
+            value={feedback}
+            onChange={(e) => setFeedback(e.target.value)}
+            rows={3}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            onClick={handleAnalyzeFeedback}
+            disabled={loading || !feedback}
+            className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
+          >
+            {loading ? 'Analyzing...' : 'Analyze with AI'}
+          </button>
+          
+          {sentimentAnalysis && (
+            <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+              <h3 className="text-lg font-medium mb-2">Analysis Results</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                <div>
+                  <p className="text-sm text-gray-600">Sentiment</p>
+                  <p className="font-semibold">{(sentimentAnalysis.sentiment * 100).toFixed(1)}%</p>
                 </div>
-                <button
-                  onClick={handleSubmitFeedback}
-                  disabled={loading}
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                >
-                  {loading ? 'Submitting...' : 'Submit Feedback'}
-                </button>
+                <div>
+                  <p className="text-sm text-gray-600">Urgency</p>
+                  <p className="font-semibold">{(sentimentAnalysis.urgency * 100).toFixed(1)}%</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600">Joy</p>
+                  <p className="font-semibold">{(sentimentAnalysis.emotions.joy * 100).toFixed(1)}%</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600">Anger</p>
+                  <p className="font-semibold">{(sentimentAnalysis.emotions.anger * 100).toFixed(1)}%</p>
+                </div>
               </div>
-            )}
+              {aiResponse && (
+                <div>
+                  <p className="text-sm text-gray-600 mb-2">AI Recommendation</p>
+                  <p className="bg-white p-3 rounded border">{aiResponse}</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Recent Proposals */}
+      <div className="mt-8 bg-white shadow-md rounded-lg p-6">
+        <h2 className="text-2xl font-semibold mb-4">Recent Proposals</h2>
+        <div className="space-y-4">
+          <div className="border rounded-lg p-4">
+            <h3 className="text-lg font-medium mb-2">Increase Staking Rewards</h3>
+            <p className="text-gray-600 mb-3">Proposal to increase staking rewards from 5% to 8% APY to incentivize more token holders.</p>
+            <div className="flex space-x-2">
+              <button
+                onClick={() => handleVote(1, true)}
+                disabled={loading || voteLoading}
+                className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded text-sm disabled:opacity-50"
+              >
+                Vote Yes
+              </button>
+              <button
+                onClick={() => handleVote(1, false)}
+                disabled={loading || voteLoading}
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded text-sm disabled:opacity-50"
+              >
+                Vote No
+              </button>
+            </div>
           </div>
-        </>
-      )}
+          
+          <div className="border rounded-lg p-4">
+            <h3 className="text-lg font-medium mb-2">Mining Pool Optimization</h3>
+            <p className="text-gray-600 mb-3">Proposal to optimize the Monero mining pool distribution algorithm for better fairness.</p>
+            <div className="flex space-x-2">
+              <button
+                onClick={() => handleVote(2, true)}
+                disabled={loading || voteLoading}
+                className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded text-sm disabled:opacity-50"
+              >
+                Vote Yes
+              </button>
+              <button
+                onClick={() => handleVote(2, false)}
+                disabled={loading || voteLoading}
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded text-sm disabled:opacity-50"
+              >
+                Vote No
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
