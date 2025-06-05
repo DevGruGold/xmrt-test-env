@@ -25,8 +25,10 @@ This guide provides instructions for deploying the XMRT Test Environment to Verc
    - Output Directory: dist
 
 2. Add Environment Variables:
-   - VITE_HUME_API_KEY: `tZ3HmPpSCUo0LIZY5KS2IGuRj7idUeiU1uWsGmrcE0gehx4b29pjqWue6YNbXGtn`
-   - VITE_SEPOLIA_RPC_URL: (Add your Infura or other provider URL)
+   - VITE_SEPOLIA_RPC_URL: `https://sepolia.infura.io/v3/c843a693bc5d43d1aee471d2491f2414`
+   - VITE_ALCHEMY_API_KEY: `HPua2YZ0vA5Yj8XTJH1j8HNVYvMWbifr`
+   - VITE_THIRDWEB_CLIENT_ID: `0dcf50123825af0a59b5a3ad2be69639`
+   - VITE_MONERO_POOL_WALLET: `46GAxLnJHpJMKwp5fuUPssKLqW2pukXuEXV9cLi8u5T8g9ENEiugbupMtjBt9jbGPtgi1EHvSxiWdDNHzpeDiTc1MFSuScD`
    - VITE_XMART_ADDRESS: (Add the deployed contract address after deployment)
    - VITE_MONERO_POOL_ADDRESS: (Add the deployed contract address after deployment)
    - VITE_CASH_DAPP_ADDRESS: (Add the deployed contract address after deployment)
@@ -56,7 +58,7 @@ If you encounter any issues with the deployment:
 1. Check the build logs in Vercel for any errors
 2. Ensure all environment variables are correctly set
 3. Verify that the smart contract addresses are correct after deployment to testnet
-4. Check that the Hume API key is valid
+4. Check that the ThirdWeb Client ID is valid
 
 ## Next Steps
 

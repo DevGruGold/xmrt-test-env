@@ -1,3 +1,5 @@
+import { getSDK, getReadOnlySDK } from './thirdwebUtils';
+import { Sepolia } from "@thirdweb-dev/chains";
 import { ethers } from 'ethers';
 
 // Contract ABIs
@@ -8,13 +10,13 @@ import CashDappIntegration_ABI from '../contracts/artifacts/CashDappIntegration.
 // Contract addresses - these would be updated after deployment
 const CONTRACT_ADDRESSES = {
   // Sepolia testnet addresses
-  sepolia: {
-    XMART: '0x0000000000000000000000000000000000000000',
-    MoneroPool: '0x0000000000000000000000000000000000000000',
-    CashDappIntegration: '0x0000000000000000000000000000000000000000'
+  [Sepolia.chainId]: {
+    XMART: import.meta.env.VITE_XMART_ADDRESS || '0x0000000000000000000000000000000000000000',
+    MoneroPool: import.meta.env.VITE_MONERO_POOL_ADDRESS || '0x0000000000000000000000000000000000000000',
+    CashDappIntegration: import.meta.env.VITE_CASH_DAPP_ADDRESS || '0x0000000000000000000000000000000000000000'
   },
   // Local development addresses
-  localhost: {
+  31337: {
     XMART: '0x0000000000000000000000000000000000000000',
     MoneroPool: '0x0000000000000000000000000000000000000000',
     CashDappIntegration: '0x0000000000000000000000000000000000000000'
@@ -23,31 +25,28 @@ const CONTRACT_ADDRESSES = {
 
 // Get the current network
 const getNetwork = async () => {
-  if (window.ethereum) {
-    try {
+  try {
+    if (window.ethereum) {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const network = await provider.getNetwork();
-      return network.name === 'unknown' ? 'localhost' : network.name;
-    } catch (error) {
-      console.error("Error getting network:", error);
-      return 'localhost';
+      return network.chainId;
     }
+    return Sepolia.chainId; // Default to Sepolia
+  } catch (error) {
+    console.error("Error getting network:", error);
+    return Sepolia.chainId; // Default to Sepolia on error
   }
-  return 'localhost';
 };
 
 // Get contract addresses for the current network
 const getContractAddresses = async () => {
-  const network = await getNetwork();
-  return CONTRACT_ADDRESSES[network] || CONTRACT_ADDRESSES.localhost;
+  const chainId = await getNetwork();
+  return CONTRACT_ADDRESSES[chainId] || CONTRACT_ADDRESSES[Sepolia.chainId];
 };
 
-// Get a contract instance
+// Get a contract instance using ThirdWeb
 const getContract = async (contractName, signer = null) => {
-  if (!window.ethereum) return null;
-  
   try {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
     const addresses = await getContractAddresses();
     const address = addresses[contractName];
     
@@ -59,54 +58,61 @@ const getContract = async (contractName, signer = null) => {
     let abi;
     switch (contractName) {
       case 'XMART':
-        abi = XMART_ABI;
+        abi = XMART_ABI.abi;
         break;
       case 'MoneroPool':
-        abi = MoneroPool_ABI;
+        abi = MoneroPool_ABI.abi;
         break;
       case 'CashDappIntegration':
-        abi = CashDappIntegration_ABI;
+        abi = CashDappIntegration_ABI.abi;
         break;
       default:
         console.error(`Unknown contract: ${contractName}`);
         return null;
     }
     
-    const signerOrProvider = signer ? provider.getSigner() : provider;
-    return new ethers.Contract(address, abi, signerOrProvider);
+    if (signer) {
+      const sdk = await getSDK(signer);
+      return await sdk.getContract(address, abi);
+    } else {
+      const sdk = getReadOnlySDK();
+      return await sdk.getContract(address, abi);
+    }
   } catch (error) {
     console.error(`Error getting ${contractName} contract:`, error);
     return null;
   }
 };
 
-// Connect wallet
+// Connect wallet using ThirdWeb
 const connectWallet = async () => {
-  if (window.ethereum) {
-    try {
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+  try {
+    if (window.ethereum) {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const accounts = await provider.send("eth_requestAccounts", []);
       return accounts[0];
-    } catch (error) {
-      console.error("Error connecting to wallet:", error);
-      throw error;
+    } else {
+      throw new Error("Ethereum wallet not found");
     }
-  } else {
-    throw new Error("Ethereum wallet not found");
+  } catch (error) {
+    console.error("Error connecting wallet:", error);
+    throw error;
   }
 };
 
 // Get connected account
 const getAccount = async () => {
-  if (window.ethereum) {
-    try {
-      const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+  try {
+    if (window.ethereum) {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const accounts = await provider.listAccounts();
       return accounts.length > 0 ? accounts[0] : null;
-    } catch (error) {
-      console.error("Error getting account:", error);
-      return null;
     }
+    return null;
+  } catch (error) {
+    console.error("Error getting account:", error);
+    return null;
   }
-  return null;
 };
 
 // Format address for display
@@ -120,6 +126,12 @@ const formatDate = (timestamp) => {
   return new Date(timestamp * 1000).toLocaleString();
 };
 
+// Get Monero pool wallet address
+const getMoneroPoolWallet = () => {
+  return import.meta.env.VITE_MONERO_POOL_WALLET || 
+    "46GAxLnJHpJMKwp5fuUPssKLqW2pukXuEXV9cLi8u5T8g9ENEiugbupMtjBt9jbGPtgi1EHvSxiWdDNHzpeDiTc1MFSuScD";
+};
+
 export {
   getNetwork,
   getContractAddresses,
@@ -127,6 +139,7 @@ export {
   connectWallet,
   getAccount,
   formatAddress,
-  formatDate
+  formatDate,
+  getMoneroPoolWallet
 };
 
