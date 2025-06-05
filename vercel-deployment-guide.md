@@ -28,6 +28,7 @@ This guide provides instructions for deploying the XMRT Test Environment to Verc
    - VITE_SEPOLIA_RPC_URL: `https://sepolia.infura.io/v3/c843a693bc5d43d1aee471d2491f2414`
    - VITE_ALCHEMY_API_KEY: `HPua2YZ0vA5Yj8XTJH1j8HNVYvMWbifr`
    - VITE_THIRDWEB_CLIENT_ID: `0dcf50123825af0a59b5a3ad2be69639`
+   - VITE_WALLETCONNECT_PROJECT_ID: `6054bd6688c6860ed806775db1c24f15`
    - VITE_MONERO_POOL_WALLET: `46GAxLnJHpJMKwp5fuUPssKLqW2pukXuEXV9cLi8u5T8g9ENEiugbupMtjBt9jbGPtgi1EHvSxiWdDNHzpeDiTc1MFSuScD`
    - VITE_XMART_ADDRESS: (Add the deployed contract address after deployment)
    - VITE_MONERO_POOL_ADDRESS: (Add the deployed contract address after deployment)
