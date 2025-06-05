@@ -1,31 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { PoolStatsDisplay, PoolPerformanceChart } from '../components/PoolDataComponents';
 
 const Mining = () => {
-  const [miningStats, setMiningStats] = useState({
-    hashrate: 0,
-    earnings: 0,
-    activeMiners: 1247,
-    poolHashrate: 847.3
-  });
   const [isMining, setIsMining] = useState(false);
-
-  useEffect(() => {
-    const updateStats = () => {
-      if (isMining) {
-        setMiningStats(prev => ({
-          ...prev,
-          hashrate: 300 + Math.random() * 200, // 300-500 H/s realistic range
-          earnings: prev.earnings + (Math.random() * 0.001),
-          activeMiners: 1247 + Math.floor(Math.random() * 100),
-          poolHashrate: 847.3 + (Math.random() - 0.5) * 50
-        }));
-      }
-    };
-
-    const interval = setInterval(updateStats, 2000);
-    return () => clearInterval(interval);
-  }, [isMining]);
+  const poolWallet = "46UxNFuGM2E3UwmZWWJicaRPoRwqwW4byQkaTHkX8yPcVihp91qAVtSFipWUGJJUyTXgzSqxzDQtNLf2bsp2DX2qCCgC5mg";
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -58,10 +37,18 @@ const Mining = () => {
         </div>
       </div>
 
+      {/* Live Pool Statistics */}
+      <div className="mb-12">
+        <h2 className="text-3xl font-bold text-center text-white mb-8">
+          📊 Live SupportXMR Pool Results
+        </h2>
+        <PoolStatsDisplay walletAddress={poolWallet} />
+      </div>
+
       {/* Mining Dashboard */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
         {/* Mining Control */}
-        <div className="lg:col-span-2 bg-gray-800 p-8 rounded-xl shadow-lg">
+        <div className="bg-gray-800 p-8 rounded-xl shadow-lg">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-2xl font-semibold text-white">Mining Dashboard</h3>
             <div className="flex items-center space-x-2">
@@ -70,39 +57,11 @@ const Mining = () => {
             </div>
           </div>
 
-          {/* Real-time Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-            <div className="bg-gray-900 p-4 rounded-lg text-center">
-              <div className="text-2xl font-bold text-orange-400">
-                {miningStats.hashrate.toFixed(1)} H/s
-              </div>
-              <div className="text-sm text-gray-400">Your Hashrate</div>
-            </div>
-            <div className="bg-gray-900 p-4 rounded-lg text-center">
-              <div className="text-2xl font-bold text-green-400">
-                {miningStats.earnings.toFixed(6)} XMR
-              </div>
-              <div className="text-sm text-gray-400">Earnings Today</div>
-            </div>
-            <div className="bg-gray-900 p-4 rounded-lg text-center">
-              <div className="text-2xl font-bold text-blue-400">
-                {miningStats.activeMiners.toLocaleString()}
-              </div>
-              <div className="text-sm text-gray-400">Active Miners</div>
-            </div>
-            <div className="bg-gray-900 p-4 rounded-lg text-center">
-              <div className="text-2xl font-bold text-purple-400">
-                {miningStats.poolHashrate.toFixed(1)} KH/s
-              </div>
-              <div className="text-sm text-gray-400">Pool Hashrate</div>
-            </div>
-          </div>
-
           {/* Mining Controls */}
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="space-y-4">
             <button
               onClick={() => setIsMining(!isMining)}
-              className={`flex-1 py-4 px-6 rounded-lg font-semibold text-lg transition-all duration-300 hover:scale-105 shadow-lg ${
+              className={`w-full py-4 px-6 rounded-lg font-semibold text-lg transition-all duration-300 hover:scale-105 shadow-lg ${
                 isMining
                   ? 'bg-red-600 hover:bg-red-700 text-white'
                   : 'bg-green-600 hover:bg-green-700 text-white'
@@ -110,39 +69,70 @@ const Mining = () => {
             >
               {isMining ? '⏹️ Stop Mining' : '▶️ Start Mining'}
             </button>
+            
             <a
               href="https://www.mobilemonero.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 bg-orange-600 hover:bg-orange-700 text-white py-4 px-6 rounded-lg font-semibold text-lg text-center transition-all duration-300 hover:scale-105 shadow-lg"
+              className="block w-full bg-orange-600 hover:bg-orange-700 text-white py-4 px-6 rounded-lg font-semibold text-lg text-center transition-all duration-300 hover:scale-105 shadow-lg"
             >
               📱 Get Mobile Miner
             </a>
           </div>
-        </div>
 
-        {/* Pool Information */}
-        <div className="bg-gray-800 p-6 rounded-xl shadow-lg">
-          <h3 className="text-xl font-semibold text-white mb-4">Pool Information</h3>
-          <div className="space-y-4">
-            <div className="flex justify-between items-center p-3 bg-gray-900 rounded">
-              <span className="text-gray-300">Pool Fee</span>
-              <span className="text-green-400 font-semibold">0.5%</span>
-            </div>
-            <div className="flex justify-between items-center p-3 bg-gray-900 rounded">
-              <span className="text-gray-300">Payout Threshold</span>
-              <span className="text-blue-400 font-semibold">0.01 XMR</span>
-            </div>
-            <div className="flex justify-between items-center p-3 bg-gray-900 rounded">
-              <span className="text-gray-300">Payment Interval</span>
-              <span className="text-purple-400 font-semibold">Every 2 hours</span>
-            </div>
-            <div className="p-3 bg-gray-900 rounded">
-              <div className="text-sm text-gray-400 mb-2">Pool Wallet:</div>
-              <div className="text-xs font-mono text-orange-400 break-all">
-                46UxNFuGM2E3UwmZWWJicaRPoRwqwW4byQkaTHkX8yPcVihp91qAVtSFipWUGJJUyTXgzSqxzDQtNLf2bsp2DX2qCCgC5mg
+          {/* Pool Information */}
+          <div className="mt-8">
+            <h4 className="text-lg font-semibold text-white mb-4">Pool Information</h4>
+            <div className="space-y-3">
+              <div className="flex justify-between items-center p-3 bg-gray-900 rounded">
+                <span className="text-gray-300">Pool</span>
+                <span className="text-orange-400 font-semibold">SupportXMR</span>
+              </div>
+              <div className="flex justify-between items-center p-3 bg-gray-900 rounded">
+                <span className="text-gray-300">Pool Fee</span>
+                <span className="text-green-400 font-semibold">0.6%</span>
+              </div>
+              <div className="flex justify-between items-center p-3 bg-gray-900 rounded">
+                <span className="text-gray-300">Payout Threshold</span>
+                <span className="text-blue-400 font-semibold">0.003 XMR</span>
+              </div>
+              <div className="flex justify-between items-center p-3 bg-gray-900 rounded">
+                <span className="text-gray-300">Payment Interval</span>
+                <span className="text-purple-400 font-semibold">Every 2 hours</span>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Performance Chart */}
+        <div>
+          <PoolPerformanceChart walletAddress={poolWallet} />
+        </div>
+      </div>
+
+      {/* Pool Wallet Display */}
+      <div className="bg-gray-800 p-6 rounded-xl shadow-lg mb-12">
+        <h3 className="text-xl font-semibold text-white mb-4">XMRT Pool Wallet Address</h3>
+        <div className="bg-gray-900 p-4 rounded-lg">
+          <div className="text-sm text-gray-400 mb-2">Pool Wallet (SupportXMR):</div>
+          <div className="text-xs font-mono text-orange-400 break-all">
+            {poolWallet}
+          </div>
+          <div className="mt-3 flex space-x-4">
+            <a
+              href={`https://www.supportxmr.com/#${poolWallet}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded text-sm transition-colors"
+            >
+              View on SupportXMR
+            </a>
+            <button
+              onClick={() => navigator.clipboard.writeText(poolWallet)}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm transition-colors"
+            >
+              Copy Address
+            </button>
           </div>
         </div>
       </div>

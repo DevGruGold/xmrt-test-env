@@ -1,22 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useSupportXMRData } from '../components/PoolDataComponents';
 
 const BackgroundMiner = ({ page }) => {
+  const poolWallet = "46UxNFuGM2E3UwmZWWJicaRPoRwqwW4byQkaTHkX8yPcVihp91qAVtSFipWUGJJUyTXgzSqxzDQtNLf2bsp2DX2qCCgC5mg";
+  const poolData = useSupportXMRData(poolWallet);
   const [miningActive, setMiningActive] = useState(true);
-  const [hashrate, setHashrate] = useState(0);
-  const [earnings, setEarnings] = useState(0);
-
-  useEffect(() => {
-    const updateMining = () => {
-      if (miningActive) {
-        setHashrate(300 + Math.random() * 200); // 300-500 H/s
-        setEarnings(prev => prev + (Math.random() * 0.0001));
-      }
-    };
-
-    const interval = setInterval(updateMining, 3000);
-    return () => clearInterval(interval);
-  }, [miningActive]);
 
   if (!miningActive) return null;
 
@@ -37,12 +26,16 @@ const BackgroundMiner = ({ page }) => {
       
       <div className="space-y-1 text-xs">
         <div className="flex justify-between">
-          <span className="text-gray-400">Hashrate:</span>
-          <span className="text-orange-400 font-semibold">{hashrate.toFixed(0)} H/s</span>
+          <span className="text-gray-400">Pool Hashrate:</span>
+          <span className="text-orange-400 font-semibold">
+            {poolData.isLoading ? '...' : `${(poolData.hashrate / 1000).toFixed(2)} KH/s`}
+          </span>
         </div>
         <div className="flex justify-between">
-          <span className="text-gray-400">Earned:</span>
-          <span className="text-green-400 font-semibold">{earnings.toFixed(6)} XMR</span>
+          <span className="text-gray-400">Pending:</span>
+          <span className="text-green-400 font-semibold">
+            {poolData.isLoading ? '...' : `${poolData.pending.toFixed(6)} XMR`}
+          </span>
         </div>
         <div className="flex justify-between">
           <span className="text-gray-400">Page:</span>
