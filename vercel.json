@@ -4,6 +4,8 @@
   ],
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "framework": "vite"
+  "framework": "vite",
+  "installCommand": "npm install --production=false",
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- contracts/ scripts/ test/ hardhat.config.cjs contracts-package.json"
 }
 
