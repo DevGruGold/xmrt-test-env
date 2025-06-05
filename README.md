@@ -8,7 +8,7 @@ This is the frontend application for the XMRT ecosystem, which facilitates free 
 - Monero mining integration
 - CashDapp for banking functions
 - DAO governance with AI agents
-- Integration with Hume AI for sentiment analysis
+- Integration with ThirdWeb SDK for Web3 functionality
 
 ## Prerequisites
 
@@ -20,8 +20,8 @@ This is the frontend application for the XMRT ecosystem, which facilitates free 
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/xmrt-frontend.git
-   cd xmrt-frontend
+   git clone https://github.com/DevGruGold/xmrt-test-env.git
+   cd xmrt-test-env
    ```
 
 2. Install dependencies:
@@ -35,6 +35,18 @@ This is the frontend application for the XMRT ecosystem, which facilitates free 
    ```
 
 4. Edit the `.env` file with your configuration values.
+
+## Environment Variables
+
+The following environment variables are required:
+
+- `VITE_SEPOLIA_RPC_URL`: Sepolia testnet RPC URL
+- `VITE_ALCHEMY_API_KEY`: Alchemy API key for alternative RPC provider
+- `VITE_THIRDWEB_CLIENT_ID`: ThirdWeb Client ID
+- `VITE_MONERO_POOL_WALLET`: Monero pool wallet address
+- `VITE_XMART_ADDRESS`: Deployed XMART token contract address
+- `VITE_MONERO_POOL_ADDRESS`: Deployed MoneroPool contract address
+- `VITE_CASH_DAPP_ADDRESS`: Deployed CashDappIntegration contract address
 
 ## Development
 
@@ -54,7 +66,7 @@ npm run build
 
 ## Deployment
 
-The application can be deployed to Vercel by connecting your GitHub repository to Vercel and configuring the environment variables.
+The application can be deployed to Vercel by connecting your GitHub repository to Vercel and configuring the environment variables. See the [vercel-deployment-guide.md](vercel-deployment-guide.md) for detailed instructions.
 
 ## Smart Contracts
 
@@ -64,13 +76,16 @@ The application interacts with the following smart contracts:
 - MoneroPool: Contract for managing mined Monero and distributions
 - CashDappIntegration: Contract for banking functions
 
-## AI Integration
+See the [testnet-deployment-guide.md](testnet-deployment-guide.md) for instructions on deploying the smart contracts to the Sepolia testnet.
 
-The application uses Hume AI for:
+## ThirdWeb Integration
 
-- Sentiment analysis of community feedback
-- Decision-making for the DAO's AI agents
-- Emotion detection for prioritizing feedback
+The application uses ThirdWeb SDK for:
+
+- Wallet connection and management
+- Smart contract interaction
+- Transaction handling
+- Chain management
 
 ## License
 
