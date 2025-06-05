@@ -1,95 +1,58 @@
-# Smart Contract Development Setup
+# XMRT Smart Contracts
 
-The smart contract development environment is separated from the frontend to avoid dependency conflicts during Vercel deployment.
+This directory contains the smart contract development environment for XMRT, separated from the frontend to avoid dependency conflicts during Vercel deployment.
 
-## Quick Setup for Contract Development
+## Setup for Smart Contract Development
 
-1. **Switch to contract development mode**:
-   ```bash
-   # Backup current package.json
-   mv package.json package-frontend.json
-   
-   # Use contracts package.json
-   mv contracts-package.json package.json
-   ```
-
-2. **Install contract dependencies**:
-   ```bash
-   npm install
-   ```
-
-3. **Develop and deploy contracts**:
-   ```bash
-   # Compile contracts
-   npm run compile
-   
-   # Run tests
-   npm run test
-   
-   # Deploy to Sepolia
-   npm run deploy:sepolia
-   ```
-
-4. **Switch back to frontend mode**:
-   ```bash
-   # Restore frontend package.json
-   mv package.json package-contracts.json
-   mv package-frontend.json package.json
-   ```
-
-## Alternative: Use a separate directory
-
-You can also create a separate `contracts/` directory for smart contract development:
+To work with smart contracts, you need to install the contract-specific dependencies:
 
 ```bash
-# Create contracts directory
-mkdir contracts-dev
-cd contracts-dev
-
-# Copy contract files
-cp -r ../contracts .
-cp -r ../scripts .
-cp -r ../test .
-cp ../hardhat.config.cjs .
-cp ../contracts-package.json package.json
-cp ../.env.deployment .env
-
-# Install and develop
-npm install
-npm run compile
-npm run test
-npm run deploy:sepolia
+# Install contract dependencies (separate from frontend)
+cp contracts-package.json package-contracts.json
+npm install --prefix . --package-lock-only --package-lock-name package-contracts-lock.json --save-dev $(cat contracts-package.json | jq -r '.devDependencies | to_entries[] | "\(.key)@\(.value)"' | tr '\n' ' ')
 ```
 
-## Environment Variables for Deployment
-
-Copy `.env.deployment` to `.env` and fill in your values:
+Or manually install the required dependencies:
 
 ```bash
-cp .env.deployment .env
-# Edit .env with your private key and API keys
+npm install --save-dev @nomicfoundation/hardhat-toolbox @openzeppelin/contracts @openzeppelin/hardhat-upgrades hardhat dotenv
 ```
 
-## Deployment Process
+## Smart Contract Development Commands
 
-1. **Compile contracts**: `npm run compile`
-2. **Run tests**: `npm run test`
-3. **Deploy to testnet**: `npm run deploy:sepolia`
-4. **Verify contracts**: `npm run verify:sepolia`
-5. **Update frontend**: Copy contract address to Vercel environment variables
+```bash
+# Compile contracts
+npx hardhat compile
 
-The deployment script will automatically:
-- Deploy the XMRT contract as an upgradeable proxy
-- Generate ABI files for the frontend
-- Create environment variable templates
-- Save deployment information
+# Run tests
+npx hardhat test
 
-## Integration with Frontend
+# Deploy to Sepolia testnet
+npx hardhat run scripts/deploy.js --network sepolia
 
-After deployment:
-1. Copy the contract address from deployment output
-2. Add `VITE_XMRT_ADDRESS=<contract_address>` to Vercel environment variables
-3. Redeploy the frontend on Vercel
+# Verify contracts on Etherscan
+npx hardhat run scripts/verify.js --network sepolia
+```
 
-The frontend will automatically use the deployed contract for all interactions.
+## Environment Variables for Contract Deployment
+
+Create a `.env` file with:
+
+```
+PRIVATE_KEY=your_private_key_here
+SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/your_infura_key
+ETHERSCAN_API_KEY=your_etherscan_api_key
+```
+
+## Contract Addresses
+
+After deployment, update the frontend environment variables in Vercel with the deployed contract addresses.
+
+## Note
+
+The frontend build process (used by Vercel) does not include these contract development dependencies to avoid build conflicts. This separation ensures:
+
+1. Frontend builds successfully on Vercel
+2. Smart contract development works locally
+3. No dependency conflicts between ethers v5 (frontend) and ethers v6 (hardhat)
 

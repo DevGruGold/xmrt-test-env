@@ -1,11 +1,18 @@
 {
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
-  ],
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "framework": "vite",
-  "installCommand": "npm install --production=false",
-  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- contracts/ scripts/ test/ hardhat.config.cjs contracts-package.json"
+  "installCommand": "npm install",
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- contracts/ scripts/ test/ hardhat.config.js hardhat.config.cjs contracts-package.json CONTRACTS_README.md",
+  "functions": {
+    "src/pages/api/*.js": {
+      "runtime": "@vercel/node"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }
 
