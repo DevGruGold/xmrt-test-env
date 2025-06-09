@@ -132,7 +132,7 @@ const Home = () => {
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
             Experience the future of decentralized finance with multiple income streams, 
             complete financial services, and community governance.
-          </p>   </p>
+          </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import EnhancedNavbar from './components/EnhancedNavbar';
 import NotificationSystem from './components/NotificationSystem';
-import EnhancedHome from './pages/EnhancedHome';
+import Home from './pages/Home';
 import Staking from './pages/Staking';
 import Mining from './pages/Mining';
 import Banking from './pages/Banking';
@@ -21,7 +21,7 @@ function App() {
         
         <main className="relative pt-16">
           <Routes>
-            <Route path="/" element={<EnhancedHome />} />
+            <Route path="/" element={<Home />} />
             <Route path="/staking" element={<Staking />} />
             <Route path="/mining" element={<Mining />} />
             <Route path="/banking" element={<Banking />} />
