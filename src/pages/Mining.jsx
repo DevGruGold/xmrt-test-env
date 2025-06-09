@@ -10,7 +10,7 @@ const Mining = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="text-center mb-12">
         <h1 className="text-4xl sm:text-5xl font-bold mb-6 bg-gradient-to-r from-orange-400 via-red-500 to-pink-400 bg-clip-text text-transparent">
-          Revolutionary Mobile Monero Mining
+          XMRT.io Mobile Monero Mining
         </h1>
         <p className="text-xl text-gray-300 mb-8 max-w-4xl mx-auto">
           The world's first user-friendly mobile Monero mining solution. Mine XMR on any Android device 

@@ -17,7 +17,7 @@ const Banking = () => {
       case 'overview':
         return (
           <div className="space-y-8">
-            <h3 className="text-2xl font-semibold text-white">Banking Services Overview</h3>
+            <h3 className="text-2xl font-semibold text-white">XMRT.io Banking Services Overview</h3>
             
             {/* Mining Integration Notice */}
             <div className="bg-gradient-to-r from-orange-600 to-red-600 p-4 rounded-lg">

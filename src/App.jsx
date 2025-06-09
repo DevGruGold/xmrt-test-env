@@ -1,46 +1,39 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import BackgroundMiner from './components/BackgroundMiner';
-
-// Pages
-import Home from './pages/Home';
-import Mining from './pages/Mining';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import EnhancedNavbar from './components/EnhancedNavbar';
+import NotificationSystem from './components/NotificationSystem';
+import EnhancedHome from './pages/EnhancedHome';
 import Staking from './pages/Staking';
+import Mining from './pages/Mining';
 import Banking from './pages/Banking';
 import DAO from './pages/DAO';
 import Analytics from './pages/Analytics';
+import AssetManagement from './pages/AssetManagement';
+import AIAgents from './pages/AIAgents';
 import Developer from './pages/Developer';
 
 function App() {
   return (
     <Router>
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-800">
-        <Navbar />
+        <EnhancedNavbar />
+        <NotificationSystem />
         
-        <main className="relative">
+        <main className="relative pt-16">
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/mining" element={<Mining />} />
+            <Route path="/" element={<EnhancedHome />} />
             <Route path="/staking" element={<Staking />} />
+            <Route path="/mining" element={<Mining />} />
             <Route path="/banking" element={<Banking />} />
             <Route path="/dao" element={<DAO />} />
             <Route path="/analytics" element={<Analytics />} />
+            <Route path="/asset-management" element={<AssetManagement />} />
+            <Route path="/ai-agents" element={<AIAgents />} />
             <Route path="/developer" element={<Developer />} />
           </Routes>
         </main>
 
-        {/* Background Mining Widget - Shows on all pages except home */}
-        <Routes>
-          <Route path="/mining" element={<BackgroundMiner page="Mining Dashboard" />} />
-          <Route path="/staking" element={<BackgroundMiner page="Staking" />} />
-          <Route path="/banking" element={<BackgroundMiner page="Banking" />} />
-          <Route path="/dao" element={<BackgroundMiner page="DAO" />} />
-          <Route path="/analytics" element={<BackgroundMiner page="Analytics" />} />
-          <Route path="/developer" element={<BackgroundMiner page="Developer" />} />
-        </Routes>
-
-        {/* Footer */}
+        {/* Enhanced Footer */}
         <footer className="bg-gray-900/90 backdrop-blur-sm border-t border-gray-700 py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-4 gap-8">
@@ -51,7 +44,7 @@ function App() {
                     <span className="text-white font-bold text-lg">X</span>
                   </div>
                   <div>
-                    <div className="text-xl font-bold text-gradient-primary">XMRT</div>
+                    <div className="text-xl font-bold text-gradient-primary">XMRT.io</div>
                     <div className="text-xs text-gray-400">Ecosystem</div>
                   </div>
                 </div>
@@ -61,27 +54,38 @@ function App() {
                 </p>
               </div>
 
-              {/* Quick Links */}
+              {/* Platform Links */}
               <div>
                 <h3 className="text-white font-semibold mb-4">Platform</h3>
-                <ul className="space-y-2 text-sm">
-                  <li><a href="/mining" className="text-gray-400 hover:text-orange-400 transition-colors">Mobile Mining</a></li>
-                  <li><a href="/staking" className="text-gray-400 hover:text-orange-400 transition-colors">Token Staking</a></li>
-                  <li><a href="/banking" className="text-gray-400 hover:text-orange-400 transition-colors">Banking Services</a></li>
-                  <li><a href="/dao" className="text-gray-400 hover:text-orange-400 transition-colors">DAO Governance</a></li>
+                <ul className="space-y-2">
+                  <li><Link to="/mining" className="text-gray-400 hover:text-orange-400 transition-colors duration-300">Mobile Mining</Link></li>
+                  <li><Link to="/staking" className="text-gray-400 hover:text-orange-400 transition-colors duration-300">Token Staking</Link></li>
+                  <li><Link to="/banking" className="text-gray-400 hover:text-orange-400 transition-colors duration-300">Banking Services</Link></li>
+                  <li><Link to="/dao" className="text-gray-400 hover:text-orange-400 transition-colors duration-300">DAO Governance</Link></li>
                 </ul>
               </div>
 
-              {/* External Services */}
+              {/* Tools Links */}
               <div>
-                <h3 className="text-white font-semibold mb-4">Services</h3>
-                <ul className="space-y-2 text-sm">
+                <h3 className="text-white font-semibold mb-4">Tools</h3>
+                <ul className="space-y-2">
+                  <li><Link to="/analytics" className="text-gray-400 hover:text-orange-400 transition-colors duration-300">Analytics</Link></li>
+                  <li><Link to="/asset-management" className="text-gray-400 hover:text-orange-400 transition-colors duration-300">Asset Management</Link></li>
+                  <li><Link to="/ai-agents" className="text-gray-400 hover:text-orange-400 transition-colors duration-300">AI Agents</Link></li>
+                  <li><Link to="/developer" className="text-gray-400 hover:text-orange-400 transition-colors duration-300">Developer Tools</Link></li>
+                </ul>
+              </div>
+
+              {/* External Links */}
+              <div>
+                <h3 className="text-white font-semibold mb-4">External</h3>
+                <ul className="space-y-2">
                   <li>
                     <a 
                       href="https://www.mobilemonero.com" 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="text-gray-400 hover:text-orange-400 transition-colors"
+                      className="text-gray-400 hover:text-orange-400 transition-colors duration-300"
                     >
                       Mobile Monero
                     </a>
@@ -91,38 +95,27 @@ function App() {
                       href="https://coldcash.vercel.app" 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="text-gray-400 hover:text-orange-400 transition-colors"
+                      className="text-gray-400 hover:text-orange-400 transition-colors duration-300"
                     >
-                      CashDapp Banking
+                      CashDapp Platform
                     </a>
                   </li>
                   <li>
                     <a 
-                      href="https://www.supportxmr.com" 
+                      href="https://supportxmr.com" 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="text-gray-400 hover:text-orange-400 transition-colors"
+                      className="text-gray-400 hover:text-orange-400 transition-colors duration-300"
                     >
                       SupportXMR Pool
                     </a>
                   </li>
-                  <li><a href="/analytics" className="text-gray-400 hover:text-orange-400 transition-colors">Analytics Dashboard</a></li>
-                </ul>
-              </div>
-
-              {/* Developer */}
-              <div>
-                <h3 className="text-white font-semibold mb-4">Developer</h3>
-                <ul className="space-y-2 text-sm">
-                  <li><a href="/developer" className="text-gray-400 hover:text-orange-400 transition-colors">Smart Contracts</a></li>
-                  <li><a href="/developer" className="text-gray-400 hover:text-orange-400 transition-colors">API Documentation</a></li>
-                  <li><a href="/developer" className="text-gray-400 hover:text-orange-400 transition-colors">Deployment Tools</a></li>
                   <li>
                     <a 
                       href="https://github.com/DevGruGold/xmrt-test-env" 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="text-gray-400 hover:text-orange-400 transition-colors"
+                      className="text-gray-400 hover:text-orange-400 transition-colors duration-300"
                     >
                       GitHub Repository
                     </a>
@@ -133,24 +126,32 @@ function App() {
 
             <div className="border-t border-gray-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
               <div className="text-gray-400 text-sm">
-                © 2024 XMRT Ecosystem. Revolutionizing decentralized finance.
+                © 2024 XMRT.io Ecosystem. Revolutionizing decentralized finance.
               </div>
               <div className="flex space-x-6 mt-4 md:mt-0">
                 <a 
                   href="https://www.mobilemonero.com" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-orange-400 transition-colors"
+                  className="text-gray-400 hover:text-orange-400 transition-colors duration-300"
                 >
-                  📱 Mobile Mining
+                  Mobile Miner
                 </a>
                 <a 
                   href="https://coldcash.vercel.app" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-blue-400 transition-colors"
+                  className="text-gray-400 hover:text-orange-400 transition-colors duration-300"
                 >
-                  🏦 Banking
+                  CashDapp
+                </a>
+                <a 
+                  href="https://supportxmr.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-orange-400 transition-colors duration-300"
+                >
+                  Mining Pool
                 </a>
               </div>
             </div>

@@ -4,7 +4,7 @@ const DAO = () => {
   return (
     <div className="max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold mb-8 text-center text-blue-400">
-        XMRT DAO Governance
+        XMRT.io DAO Governance
       </h1>
 
       <div className="grid md:grid-cols-2 gap-8">

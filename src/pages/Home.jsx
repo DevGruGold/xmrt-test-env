@@ -8,7 +8,7 @@ const Home = () => {
       <section className="relative bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 py-20 px-4">
         <div className="max-w-6xl mx-auto text-center">
           <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-orange-400 via-red-500 to-pink-400 bg-clip-text text-transparent">
-            XMRT Ecosystem
+            XMRT.io Ecosystem
           </h1>
           <p className="text-2xl md:text-3xl text-gray-200 mb-6 font-light">
             The Complete Financial Freedom Platform
@@ -74,7 +74,7 @@ const Home = () => {
             <div className="flex justify-center mb-12">
               <div className="bg-gradient-to-br from-orange-500 to-red-500 p-8 rounded-full shadow-2xl">
                 <div className="text-white text-center">
-                  <div className="text-3xl font-bold mb-2">XMRT</div>
+                  <div className="text-3xl font-bold mb-2">XMRT.io</div>
                   <div className="text-sm">Ecosystem Hub</div>
                 </div>
               </div>
@@ -95,7 +95,7 @@ const Home = () => {
                 <div className="bg-gray-800 hover:bg-gray-700 p-6 rounded-xl transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-blue-500">
                   <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">💎</div>
                   <h3 className="text-xl font-semibold text-blue-400 mb-2">Token Staking</h3>
-                  <p className="text-gray-300 text-sm mb-4">Stake XMRT tokens to earn rewards and participate in ecosystem governance.</p>
+                  <p className="text-gray-300 text-sm mb-4">Stake XMRT.io tokens to earn rewards and participate in ecosystem governance.</p>
                   <div className="text-blue-400 font-semibold">Earn Rewards →</div>
                 </div>
               </Link>
@@ -126,13 +126,13 @@ const Home = () => {
       <section className="py-20 bg-gradient-to-br from-gray-800 to-gray-900">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Why Join the XMRT Ecosystem?
-            </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Experience the future of decentralized finance with multiple income streams, 
-              complete financial services, and community governance.
-            </p>
+                 <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            Why Join the XMRT.io Ecosystem?
+          </h2>
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            Experience the future of decentralized finance with multiple income streams, 
+            complete financial services, and community governance.
+          </p>   </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -142,7 +142,7 @@ const Home = () => {
               <h3 className="text-2xl font-semibold text-green-400 mb-4">Multiple Income Streams</h3>
               <ul className="space-y-2 text-gray-300">
                 <li>• Mine XMR on mobile devices</li>
-                <li>• Stake XMRT tokens for rewards</li>
+                <li>• Stake XMRT.io tokens for rewards</li>
                 <li>• Earn from banking services</li>
                 <li>• DAO participation rewards</li>
               </ul>
@@ -215,7 +215,7 @@ const Home = () => {
             Ready to Join the Revolution?
           </h2>
           <p className="text-xl text-gray-300 mb-12">
-            Start your journey to financial freedom with the XMRT ecosystem. 
+            Start your journey to financial freedom with the XMRT.io ecosystem. 
             Mine, stake, bank, and govern - all in one platform.
           </p>
 

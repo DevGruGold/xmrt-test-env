@@ -22,7 +22,7 @@ const Developer = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <div className="bg-gray-900 p-6 rounded-lg border-l-4 border-blue-500">
                 <div className="flex items-center justify-between mb-4">
-                  <h4 className="text-lg font-semibold text-blue-400">XMRT Token</h4>
+                  <h4 className="text-lg font-semibold text-blue-400">XMRT.io Token</h4>
                   <div className="text-2xl">💎</div>
                 </div>
                 <div className="text-sm text-green-400 mb-2">✅ Deployed</div>

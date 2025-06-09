@@ -151,7 +151,7 @@ const Analytics = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="bg-gray-900 p-6 rounded-lg border-l-4 border-blue-500">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-semibold text-blue-400">XMRT Tokens</h3>
+                  <h3 className="text-xl font-semibold text-blue-400">XMRT.io Tokens</h3>
                   <div className="text-2xl">💎</div>
                 </div>
                 <div className="space-y-2">

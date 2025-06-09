@@ -22,10 +22,10 @@ const Staking = () => {
         {/* Hero Section */}
         <div className="text-center mb-16">
           <h1 className="text-responsive-3xl font-bold mb-6 text-gradient-primary">
-            XMRT Token Staking
+            XMRT.io Token Staking
           </h1>
           <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
-            Stake your XMRT tokens to earn rewards while supporting the ecosystem. 
+            Stake your XMRT.io tokens to earn rewards while supporting the ecosystem. 
             Combine staking rewards with mobile mining for maximum earnings.
           </p>
           
@@ -53,12 +53,12 @@ const Staking = () => {
         <div className="grid lg:grid-cols-2 gap-12 mb-16">
           {/* Staking Form */}
           <div className="card-primary">
-            <h2 className="text-2xl font-bold text-white mb-6">Stake XMRT Tokens</h2>
+            <h2 className="text-2xl font-bold text-white mb-6">Stake XMRT.io Tokens</h2>
             
             <div className="space-y-6">
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Amount to Stake (XMRT)
+                  Amount to Stake (XMRT.io)
                 </label>
                 <input
                   type="number"
@@ -89,7 +89,7 @@ const Staking = () => {
               <div className="bg-gray-900 p-4 rounded-lg">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-gray-400">Estimated Rewards:</span>
-                  <span className="text-green-400 font-semibold">{calculateRewards()} XMRT</span>
+                  <span className="text-green-400 font-semibold">{calculateRewards()} XMRT.io</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-gray-400">APY:</span>
@@ -110,15 +110,15 @@ const Staking = () => {
               <div className="space-y-4">
                 <div className="flex justify-between items-center p-3 bg-gray-900 rounded">
                   <span className="text-gray-300">Total Staked</span>
-                  <span className="text-blue-400 font-semibold">0 XMRT</span>
+                  <span className="text-blue-400 font-semibold">0 XMRT.io</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-gray-900 rounded">
                   <span className="text-gray-300">Pending Rewards</span>
-                  <span className="text-green-400 font-semibold">0 XMRT</span>
+                  <span className="text-green-400 font-semibold">0 XMRT.io</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-gray-900 rounded">
                   <span className="text-gray-300">Total Earned</span>
-                  <span className="text-purple-400 font-semibold">0 XMRT</span>
+                  <span className="text-purple-400 font-semibold">0 XMRT.io</span>
                 </div>
               </div>
             </div>
@@ -158,7 +158,7 @@ const Staking = () => {
             <div className="bg-gray-900/50 p-6 rounded-xl">
               <h3 className="text-xl font-semibold text-blue-400 mb-4">💎 Staking Rewards</h3>
               <ul className="space-y-2 text-gray-300">
-                <li>• 12% APY on staked XMRT tokens</li>
+                <li>• 12% APY on staked XMRT.io tokens</li>
                 <li>• Bonus rates for longer lock periods</li>
                 <li>• Governance voting rights</li>
                 <li>• Compound rewards automatically</li>
@@ -199,7 +199,7 @@ const Staking = () => {
                 <span className="text-2xl">1️⃣</span>
               </div>
               <h3 className="text-lg font-semibold text-blue-400 mb-2">Deposit Tokens</h3>
-              <p className="text-gray-300 text-sm">Stake your XMRT tokens in the smart contract</p>
+              <p className="text-gray-300 text-sm">Stake your XMRT.io tokens in the smart contract</p>
             </div>
 
             <div className="text-center">

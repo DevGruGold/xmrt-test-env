@@ -28,7 +28,7 @@ const Navbar = () => {
             </div>
             <div>
               <div className="text-xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
-                XMRT
+                XMRT.io
               </div>
               <div className="text-xs text-gray-400 -mt-1">Ecosystem</div>
             </div>
