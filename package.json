@@ -27,6 +27,26 @@
     "postcss": "^8.5.4",
     "tailwindcss": "^3.4.1",
     "vite": "^5.1.6"
-  }
+  },
+  "author": "Joe - XMRT",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DevGruGold/xmrt-test-env.git"
+  },
+  "keywords": [
+    "blockchain",
+    "cryptocurrency",
+    "privacy",
+    "defi",
+    "financial-freedom",
+    "liberty",
+    "web3",
+    "decentralized",
+    "crypto",
+    "privacy-tech",
+    "iot",
+    "sensors",
+    "data-privacy"
+  ]
 }
-
